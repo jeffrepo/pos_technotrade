@@ -18,6 +18,7 @@
 
     'data': [
         'views/product_template_views.xml',
+        'views/pos_restaurant_views.xml',
         'views/product_views.xml',
     ],
     'assets':{
@@ -28,7 +29,7 @@
         ],
         'web.assets_backend': [
         ],
-    },    
+    },
     'qweb': [
     ],
     'license': 'LGPL-3',

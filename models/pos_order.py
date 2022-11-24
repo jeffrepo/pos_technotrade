@@ -24,16 +24,30 @@ _logger = logging.getLogger(__name__)
 
 class PosOrder(models.Model):
     _inherit = "pos.order"
-    
-    nozzle = fields.Char('Nozzle')
-    
+
+    nozzle = fields.Integer('Nozzle')
+    transaction = fields.Integer('Transaction technotrade')
+
+    @api.model
+    def _order_fields(self, ui_order):
+        res = super(PosOrder, self)._order_fields(ui_order)
+        logging.warning('UI ORDER')
+        logging.warning(ui_order)
+        if "transaction" in ui_order:
+            logging.warning('TRANSACTION UI')
+            logging.warning(ui_order['transaction'])
+            res['transaction'] = ui_order['transaction'] or False
+        if "nozzle" in ui_order:
+            res['nozzle'] = ui_order['nozzle'] or False
+        return res
+
     def technotrade_connection(self, data):
         url = "https://epikpts.ddns.net/jsonPTS"
         headers = {
           'Content-Type': 'application/json',
           #'Authorization': 'Bearer '+str(refresh_token_config)
-        }        
-        
+        }
+
         logging.warning('technotrade_connection')
         response = requests.post(url, data = data,auth=HTTPDigestAuth('admin', 'admin'), headers = headers, verify=False)
         logging.warning('response')
@@ -56,40 +70,99 @@ class PosOrder(models.Model):
         else:
             response_connection = {'status_code': response.status_code}
         return response_connection
-            
-        
-    def report_pump_transactions(self, pump):
+
+
+    def report_pump_transactions(self, table_id, date_start, date_end):
         logging.warning('ENTRA report_pump_transactions')
-        logging.warning(pump)
-        data =""" {
+        logging.warning(table_id)
+        logging.warning(date_start)
+        #ds = date_start[0].split('.')[0]
+        #de = str(date_end[0].split('.')[0])
+        #ds = "2022-11-23T19:26:54"
+        #de = "2022-11-24T19:26:54"
+        #logging.warning(ds)
+        table_id = self.env['restaurant.table'].search([('id','=',table_id[0])])
+        data =''' {
             "Protocol":"jsonPTS",
             "Packets": [{
                 "Id": 1,
                 "Type": "ReportGetPumpTransactions",
                 "Data":{
-                    "Pump":1,
-                    "DateTimeStart":"2022-05-19T12:45:14",
-                    "DateTimeEnd":"2022-11-16T13:45:14"
+                    "Pump": ''' +str(table_id.pump_id.id)+ ''',
+                    "DateTimeStart": '''+'''"'''+ str(date_start[0])+'''"'''+''',
+                    "DateTimeEnd": '''+'''"'''+ str(date_end[0])+ '''"'''+''',
                 }
-                
+
             }]
-        }"""
+        }'''
+        logging.warning(data)
         response_technotrade = self.technotrade_connection(data)
         logging.warning("RESPONSE TECHNOTRASE report_pump_transactions")
         logging.warning(response_technotrade)
         if len(response_technotrade) > 0:
             logging.warning(response_technotrade[0]["Data"])
             if "Data" in response_technotrade[0] and len(response_technotrade[0]["Data"]) > 0:
-                product_ids = self.env['product.product'].search([('nozzle','>',0)])
+                product_ids = self.env['product.product'].search([('nozzle_ids','!=',False)])
                 logging.warning(product_ids)
                 product_dic = {}
                 if product_ids:
                     for product in product_ids:
-                        if product.nozzle not in product_dic:
-                            product_dic[product.nozzle] = product.id
-                            
+                        for nozzle in product.nozzle_ids:
+                            if int(nozzle.name) not in product_dic:
+                                product_dic[int(nozzle.name)] = product.id
+
+                logging.warning('PRODUCT DIC')
+                logging.warning(product_dic)
                 for data in response_technotrade[0]["Data"]:
-                    nozzle = data["Nozzle"]
-                    data['product_id'] = product_dic[nozzle]
-                    
+                    logging.warning(data)
+                    transaction_exist = self.env['pos.order'].search([('transaction','=',int(data['Transaction'])), ('table_id.pump_id','=', int(data['Pump']) ) ])
+
+
+                    #Verificamos si existe la transaccion en pos.order, para que no la mande de nuevo al frontend
+                    logging.warning(transaction_exist)
+                    if len(transaction_exist) == 0:
+                        logging.warning(product_dic)
+                        logging.warning('no ELIMINA')
+                        nozzle_data = int(data["Nozzle"])
+                        logging.warning(nozzle_data)
+                        data['product_id'] = product_dic[nozzle_data]
+
+        logging.warning('RESPONSE  PUPM T')
+        logging.warning(response_technotrade)
         return response_technotrade
+
+    def get_pump_nozzles_onfiguration(self):
+        logging.warning('ENTRA get_pump_nozzles_onfiguration')
+        data =""" {
+            "Protocol":"jsonPTS",
+            "Packets": [{
+                "Id": 1,
+                "Type":"GetPumpNozzlesConfiguration"
+
+            }]
+        }"""
+        response_technotrade = self.technotrade_connection(data)
+        logging.warning("RESPONSE TECHNOTRASE get_pump_nozzles_onfiguration")
+        logging.warning(response_technotrade)
+        if len(response_technotrade) > 0:
+            logging.warning(response_technotrade[0]["Data"])
+            if "Data" in response_technotrade[0] and len(response_technotrade[0]["Data"]) > 0:
+                if "PumpNozzles" in response_technotrade[0]["Data"] and len(response_technotrade[0]["Data"]["PumpNozzles"]) > 0:
+                    pump_ids = self.env['technotrade.pump'].search([])
+                    pump_dic = {}
+                    if len(pump_ids)>0:
+                        for p in pump_ids:
+                            if p.name not in pump_dic:
+                                pump_dic[int(p.name)] = p
+
+                    for p in response_technotrade[0]["Data"]["PumpNozzles"]:
+                        if p["PumpId"] in pump_dic:
+                            pump_dic[p["PumpId"]].update({'name': p["PumpId"]})
+                        else:
+                            pump_id = self.env['technotrade.pump'].create({'name':  p["PumpId"]})
+                            logging.warning(pump_id)
+
+                    logging.warning('test')
+
+
+        return True
