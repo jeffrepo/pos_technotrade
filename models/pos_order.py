@@ -49,7 +49,7 @@ class PosOrder(models.Model):
         }
 
         logging.warning('technotrade_connection')
-        response = requests.post(url, data = data,auth=HTTPDigestAuth('admin', 'admin'), headers = headers, verify=False)
+        response = requests.post(url, data = data,auth=HTTPDigestAuth('admin', 'admin'), headers = headers,timeout=8.0 ,verify=False)
         logging.warning('response')
         logging.warning(response)
         response_connection = {}
@@ -81,14 +81,16 @@ class PosOrder(models.Model):
         #ds = "2022-11-23T19:26:54"
         #de = "2022-11-24T19:26:54"
         #logging.warning(ds)
-        table_id = self.env['restaurant.table'].search([('id','=',table_id[0])])
+        #table_id = self.env['restaurant.table'].search([('id','=',table_id[0])])
+        table_id = 1
+        pump_id = 1
         data =''' {
             "Protocol":"jsonPTS",
             "Packets": [{
                 "Id": 1,
                 "Type": "ReportGetPumpTransactions",
                 "Data":{
-                    "Pump": ''' +str(table_id.pump_id.id)+ ''',
+                    "Pump": ''' +str(pump_id)+ ''',
                     "DateTimeStart": '''+'''"'''+ str(date_start[0])+'''"'''+''',
                     "DateTimeEnd": '''+'''"'''+ str(date_end[0])+ '''"'''+''',
                 }
@@ -115,8 +117,8 @@ class PosOrder(models.Model):
                 logging.warning(product_dic)
                 for data in response_technotrade[0]["Data"]:
                     logging.warning(data)
-                    transaction_exist = self.env['pos.order'].search([('transaction','=',int(data['Transaction'])), ('table_id.pump_id','=', int(data['Pump']) ) ])
-
+                    #transaction_exist = self.env['pos.order'].search([('transaction','=',int(data['Transaction'])), ('table_id.pump_id','=', int(data['Pump']) ) ])
+                    transaction_exist = []
 
                     #Verificamos si existe la transaccion en pos.order, para que no la mande de nuevo al frontend
                     logging.warning(transaction_exist)
@@ -129,6 +131,7 @@ class PosOrder(models.Model):
 
         logging.warning('RESPONSE  PUPM T')
         logging.warning(response_technotrade)
+        response_technotrade = response_technotrade[0]['Data']
         return response_technotrade
 
     def get_pump_nozzles_onfiguration(self):

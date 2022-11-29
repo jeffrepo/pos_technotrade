@@ -14,16 +14,17 @@
     'category': 'Uncategorized',
     'version': '0.1',
 
-    'depends': ['point_of_sale','pos_restaurant','web'],
+    'depends': ['point_of_sale','web'],
 
     'data': [
         'views/product_template_views.xml',
-        'views/pos_restaurant_views.xml',
+        #'views/pos_restaurant_views.xml',
         'views/product_views.xml',
     ],
     'assets':{
         'point_of_sale.assets': [
             'pos_technotrade/static/src/js/**/*.js',
+            'pos_technotrade/static/src/xml/**/*.xml',
         ],
         'web.assets_qweb':[
         ],
