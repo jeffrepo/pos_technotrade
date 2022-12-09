@@ -20,7 +20,7 @@ odoo.define('pos_technotrade.TransactionRow', function (require) {
             const highlightedOrder = this.props.highlightedOrder;
             const highlightedTransaction = this.props.highlightedTransaction;
             console.log('highlighted rows this.props.highlightedTransaction')
-            console.log(this.props.highlightedTransaction)
+            console.log(this)
             return !highlightedTransaction ? false : highlightedTransaction.backendId === this.props.order.backendId;
         }
 
@@ -32,6 +32,8 @@ odoo.define('pos_technotrade.TransactionRow', function (require) {
             return this.order.name;
         }
         get transaction(){
+            console.log('Transaction id')
+            console.log(this.order.Transaction)
             return this.order.Transaction
         }
         get nozzle(){

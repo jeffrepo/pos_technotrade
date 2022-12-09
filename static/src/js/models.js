@@ -2,7 +2,7 @@ odoo.define('pos_technotrade.models', function(require) {
     'use strict';
 
 //const models = require('point_of_sale.models');
-const { PosGlobalState, Order } = require('point_of_sale.models');
+const { PosGlobalState, Order, Orderline } = require('point_of_sale.models');
 const Registries = require('point_of_sale.Registries');
 const rpc = require('web.rpc');
 //const models = require('point_of_sale.models');
@@ -51,7 +51,6 @@ const PosTechrOrder = (Order) => class PosTechrOrder extends Order {
     }
 }
 Registries.Model.extend(Order, PosTechrOrder);
-
 
 // const PosTechnoPosGlobalState = (PosGlobalState) => class PosHrPosGlobalState extends PosGlobalState {
 //     async _processData(loadedData) {

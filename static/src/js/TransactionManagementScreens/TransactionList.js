@@ -16,12 +16,12 @@ odoo.define('pos_transaction.TransactionList', function (require) {
             super.setup();
             useListener('click-order', this._onClickOrder);
             console.log('TransactionList')
-            console.log(this.props)
+            console.log(this)
             this.state = useState({ highlightedTransaction: this.props.initHighlightedOrder || null });
         }
         get highlightedTransaction() {
             console.log('highlightedTransaction')
-            console.log(this.state)
+            console.log(this)
             return this.state.highlightedTransaction;
         }
         _onClickOrder({ detail: order }) {

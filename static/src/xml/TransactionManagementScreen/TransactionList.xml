@@ -17,8 +17,7 @@
 <div class="col state">State</div> -->
             </div>
             <div class="order-list">
-                
-                <t t-foreach="props.orders" t-as="order" t-key="order.transaction">
+                <t t-foreach="props.orders" t-as="order" t-key="order.Transaction">
                     <TransactionRow order="order" highlightedTransaction="highlightedTransaction" />
                 </t>
             </div>

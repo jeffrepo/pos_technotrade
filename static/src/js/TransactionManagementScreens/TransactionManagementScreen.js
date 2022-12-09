@@ -115,9 +115,9 @@ odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
                     pump: clickedTransaction.Pump,
                 });
 
-                  
+                    //new_line.set_transaction(clickedTransaction.Transaction);
                     //new_line.setQuantityFromSOL(line);
-                    new_line.set_unit_price(clickedTransaction.TotalAmount);
+                    //new_line.set_unit_price(clickedTransaction.TotalAmount);
                     //new_line.set_discount(line.discount);
                     this.env.pos.get_order().add_orderline(new_line);                  
                   

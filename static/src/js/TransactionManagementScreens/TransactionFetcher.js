@@ -49,7 +49,7 @@ odoo.define('pos_technotrade.TransactionFetcher', function (require) {
                     (this.currentPage - 1 - 1) *
                         this.nPerPage;
                 limit = this.nPerPage;
-                this.ordersToShow = await this._fetch(limit, offset);
+                this.ordersToShow = false;
                 this.transactionToShow = await this._fetch(limit, offset);
 
                 this.trigger('update');
@@ -74,12 +74,14 @@ odoo.define('pos_technotrade.TransactionFetcher', function (require) {
          * @param {number} offset
          */
         async _fetch(limit, offset) {
-            const sale_orders = await this._getOrderIdsForCurrentPage(limit, offset);
+            const sale_orders = [];
             const server_transactions = await this._getTransactionsForCurrentPage();
             console.log('_fetch in fetcher.js')
             console.log(sale_orders)
             console.log(server_transactions)
-            this.totalCount = sale_orders.length;
+            this.totalCount = server_transactions.length;
+            console.log(' this.totalCount')
+            console.log(this.totalCount)
             return server_transactions;
         }
         async _getOrderIdsForCurrentPage(limit, offset) {
@@ -95,7 +97,7 @@ odoo.define('pos_technotrade.TransactionFetcher', function (require) {
         async _getTransactionsForCurrentPage() {
             var date_end = new Date();
             var date_start = new Date();
-            date_start.setHours(date_end.getHours()-6)   
+            date_start.setHours(date_end.getHours()-48)   
             return await this.rpc({
                 model: 'pos.order',
                 method: 'report_pump_transactions',

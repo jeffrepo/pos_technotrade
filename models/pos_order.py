@@ -33,6 +33,7 @@ class PosOrder(models.Model):
         res = super(PosOrder, self)._order_fields(ui_order)
         logging.warning('UI ORDER')
         logging.warning(ui_order)
+        logging.warning(res)
         if "transaction" in ui_order:
             logging.warning('TRANSACTION UI')
             logging.warning(ui_order['transaction'])
@@ -76,6 +77,7 @@ class PosOrder(models.Model):
         logging.warning('ENTRA report_pump_transactions')
         logging.warning(table_id)
         logging.warning(date_start)
+        logging.warning(date_end)
         #ds = date_start[0].split('.')[0]
         #de = str(date_end[0].split('.')[0])
         #ds = "2022-11-23T19:26:54"
@@ -83,59 +85,96 @@ class PosOrder(models.Model):
         #logging.warning(ds)
         #table_id = self.env['restaurant.table'].search([('id','=',table_id[0])])
         table_id = 1
-        pump_id = 1
-        data =''' {
+        pump_ids = self.env['technotrade.pump'].search([])
+        transactions = []
+        if len(pump_ids):
+            for p in pump_ids:
+                data =''' {
+                    "Protocol":"jsonPTS",
+                    "Packets": [{
+                        "Id": 1,
+                        "Type": "ReportGetPumpTransactions",
+                        "Data":{
+                            "Pump": ''' +str(p.name)+ ''',
+                            "DateTimeStart": '''+'''"'''+ str(date_start[0])+'''"'''+''',
+                            "DateTimeEnd": '''+'''"'''+ str(date_end[0])+ '''"'''+''',
+                        }
+
+                    }]
+                }'''
+                logging.warning(data)
+                response_technotrade = self.technotrade_connection(data)
+                logging.warning("RESPONSE TECHNOTRASE report_pump_transactions")
+                logging.warning(response_technotrade)
+                if len(response_technotrade) > 0:
+                    logging.warning(response_technotrade[0]["Data"])
+                    if "Data" in response_technotrade[0] and len(response_technotrade[0]["Data"]) > 0:
+                        product_ids = self.env['product.product'].search([('nozzle','>',0)])
+                        logging.warning(product_ids)
+                        product_dic = {}
+                        if product_ids:
+                            for product in product_ids:
+                                if int(product.nozzle) not in product_dic:
+                                    product_dic[int(product.nozzle)] = product.id
+                                #for nozzle in product.nozzle_ids:
+                                 #   if int(nozzle.name) not in product_dic:
+                                  #      product_dic[int(nozzle.name)] = product.id
+
+                        logging.warning('PRODUCT DIC')
+                        logging.warning(product_dic)
+                        for data in response_technotrade[0]["Data"]:
+                            logging.warning(data)
+                            #transaction_exist = self.env['pos.order'].search([('transaction','=',int(data['Transaction'])), ('table_id.pump_id','=', int(data['Pump']) ) ])
+
+                            #Verificamos si existe la transaccion en pos.order.line, para que no la mande de nuevo al frontend
+                            transaction_exist = self.env['pos.order.line'].search([('transaction','=', int(data['Transaction']) )])
+                            logging.warning(transaction_exist)
+                            if len(transaction_exist) == 0:
+                                logging.warning(product_dic)
+                                logging.warning('no ELIMINA')
+                                nozzle_data = int(data["Nozzle"])
+                                logging.warning(nozzle_data)
+                                data['product_id'] = product_dic[nozzle_data]
+                                transactions.append(data)
+                                
+        logging.warning('RESPONSE  PUPM T')
+        logging.warning(transactions)
+        return transactions
+
+    def get_fuel_grades_configuration(self):
+        data =""" {
             "Protocol":"jsonPTS",
             "Packets": [{
                 "Id": 1,
-                "Type": "ReportGetPumpTransactions",
-                "Data":{
-                    "Pump": ''' +str(pump_id)+ ''',
-                    "DateTimeStart": '''+'''"'''+ str(date_start[0])+'''"'''+''',
-                    "DateTimeEnd": '''+'''"'''+ str(date_end[0])+ '''"'''+''',
-                }
+                "Type":"GetFuelGradesConfiguration"
 
             }]
-        }'''
-        logging.warning(data)
+        }"""
+        
         response_technotrade = self.technotrade_connection(data)
-        logging.warning("RESPONSE TECHNOTRASE report_pump_transactions")
+        logging.warning("RESPONSE TECHNOTRASE get_fuel_grades_configuration")
         logging.warning(response_technotrade)
-        if len(response_technotrade) > 0:
-            logging.warning(response_technotrade[0]["Data"])
+        if len(response_technotrade) > 0:        
             if "Data" in response_technotrade[0] and len(response_technotrade[0]["Data"]) > 0:
-                product_ids = self.env['product.product'].search([('nozzle_ids','!=',False)])
-                logging.warning(product_ids)
-                product_dic = {}
-                if product_ids:
-                    for product in product_ids:
-                        for nozzle in product.nozzle_ids:
-                            if int(nozzle.name) not in product_dic:
-                                product_dic[int(nozzle.name)] = product.id
-
-                logging.warning('PRODUCT DIC')
-                logging.warning(product_dic)
-                for data in response_technotrade[0]["Data"]:
-                    logging.warning(data)
-                    #transaction_exist = self.env['pos.order'].search([('transaction','=',int(data['Transaction'])), ('table_id.pump_id','=', int(data['Pump']) ) ])
-                    transaction_exist = []
-
-                    #Verificamos si existe la transaccion en pos.order, para que no la mande de nuevo al frontend
-                    logging.warning(transaction_exist)
-                    if len(transaction_exist) == 0:
-                        logging.warning(product_dic)
-                        logging.warning('no ELIMINA')
-                        nozzle_data = int(data["Nozzle"])
-                        logging.warning(nozzle_data)
-                        data['product_id'] = product_dic[nozzle_data]
-
-        logging.warning('RESPONSE  PUPM T')
-        logging.warning(response_technotrade)
-        response_technotrade = response_technotrade[0]['Data']
-        return response_technotrade
-
+                if "FuelGrades" in response_technotrade[0]["Data"] and len(response_technotrade[0]["Data"]["FuelGrades"]) > 0:
+                    product_ids = self.env['product.template'].search([('nozzle','>', 0)])
+                    product_dic = {}
+                    if len(product_ids)>0:
+                        for p in product_ids:
+                            if p.nozzle not in product_dic:
+                                product_dic[int(p.nozzle)] = p
+                                
+                    for p in response_technotrade[0]["Data"]["FuelGrades"]:
+                        if p["Id"] in product_dic:
+                            product_dic[p["Id"]].update({'name':  p["Name"],'nozzle': p["Id"], 'detailed_type': 'product', 'available_in_pos': True, 'list_price': p["Price"]})
+                        else:
+                            pt = self.env['product.template'].create({'name':  p["Name"], 'nozzle': p["Id"], 'list_price': p["Price"], 'detailed_type': 'product', 'available_in_pos': True})
+                            logging.warning(pt)
+        return True
+    
     def get_pump_nozzles_onfiguration(self):
         logging.warning('ENTRA get_pump_nozzles_onfiguration')
+        self.get_fuel_grades_configuration()
         data =""" {
             "Protocol":"jsonPTS",
             "Packets": [{
@@ -169,3 +208,9 @@ class PosOrder(models.Model):
 
 
         return True
+
+     
+class PosOrderLine(models.Model):
+    _inherit = "pos.order.line"
+
+    transaction = fields.Integer('Transaction technotrade')
