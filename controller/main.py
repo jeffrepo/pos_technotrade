@@ -74,7 +74,7 @@ class PosRoute(http.Controller):
                                     "Packets": [{
                                         "Id": 1,
                                         "Type": "RequestMessageType",
-                                        "Error": true,
+                                        "Error": 'true',
                                         "Code": 1,
                                         "Message": "Couldn't been created",
                                     }]
@@ -87,7 +87,7 @@ class PosRoute(http.Controller):
                                 "Packets": [{
                                     "Id": 1,
                                     "Type": "RequestMessageType",
-                                    "Error": true,
+                                    "Error": 'true',
                                     "Code": 28,
                                     "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
                                 }]
