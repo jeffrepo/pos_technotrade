@@ -32,6 +32,7 @@ class PosRoute(http.Controller):
         logging.warning('EXTERNAL POS TECHNOTRADE CONECTION HTTP')
         json_data = json.loads(request.httprequest.data)
         logging.warning(json_data)
+        data = {}
         if json_data:
             if 'Packets' in json_data and len(json_data['Packets']) > 0:
                 for p in json_data['Packets']:
@@ -81,13 +82,17 @@ class PosRoute(http.Controller):
                                 '''
                         else:
                             logging.warning('ya existe')
-                            data = ''' {
-                                "Protocol": "jsonPTS",
-                                "Packets": [{
-                                    "Id": 1,
-                                    "Type": "RequestMessageType",
-                                    "Message": "OK"
-                                }]
-                                } '''
+                            data = '''
+                                    {
+                                    "Protocol": "jsonPTS",
+                                    "Packets": [{
+                                        "Id": 1,
+                                        "Type": "RequestMessageType",
+                                        "Error": true,
+                                        "Code": 28,
+                                        "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
+                                    }]
+                                    }
+                                '''
 
         return data
