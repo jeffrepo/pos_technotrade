@@ -64,7 +64,7 @@ class PosRoute(http.Controller):
                                 "Packets": [{
                                     "Id": transaction_id.request_id,
                                     "Type": "UploadPumpTransaction",
-                                    "Message": "OK"
+                                    "Message": "OK",
                                     'Data':  p['Data'],
                                 }]
                                 }
