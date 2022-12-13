@@ -4,7 +4,7 @@ import logging
 
 from odoo import http
 
-from odoo.http import request, Response, JsonRequest
+from odoo.http import request, Response
 from odoo.tools.translate import _
 from odoo.tools import date_utils
 import logging
@@ -92,7 +92,7 @@ class PosRoute(http.Controller):
                                 }]
                                 }'''
 
-        request._json_response = self.alternative_json_response.__get__(request, JsonRequest)
+        request._json_response = self.alternative_json_response.__get__(request, request.dispatcher.jsonrequest)
         logging.warning(data)
 
         return data
