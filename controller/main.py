@@ -65,6 +65,7 @@ class PosRoute(http.Controller):
                                     "Id": transaction_id.request_id,
                                     "Type": "UploadPumpTransaction",
                                     "Message": "OK"
+                                    'Data':  p['Data'],
                                 }]
                                 }
                             else:
