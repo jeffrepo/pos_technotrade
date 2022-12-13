@@ -80,19 +80,5 @@ class PosRoute(http.Controller):
                                     }]
                                     }
                                 '''
-                        else:
-                            logging.warning('ya existe')
-                            data = '''
-                                    {
-                                    "Protocol": "jsonPTS",
-                                    "Packets": [{
-                                        "Id": 1,
-                                        "Type": "RequestMessageType",
-                                        "Error": true,
-                                        "Code": 28,
-                                        "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
-                                    }]
-                                    }
-                                '''
 
         return data
