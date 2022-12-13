@@ -8,6 +8,8 @@ from odoo.http import request, Response
 from odoo.tools.translate import _
 from odoo.tools import date_utils
 import logging
+from werkzeug.wrappers import Request, Response
+
 import requests
 _logger = logging.getLogger(__name__)
 
@@ -92,7 +94,10 @@ class PosRoute(http.Controller):
                                 }]
                                 }'''
 
-        request._json_response = self.alternative_json_response.__get__(request, request.dispatcher.jsonrequest)
+        #request._json_response = self.alternative_json_response.__get__(request, request.dispatcher.jsonrequest)
         logging.warning(data)
+        headers = {'Content-Type': 'application/json'}
 
-        return data
+        body = data
+        return Response(json.dumps(body), headers=headers)
+        #return data
