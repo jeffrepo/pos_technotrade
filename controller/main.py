@@ -59,18 +59,17 @@ class PosRoute(http.Controller):
                             if len(transaction_id) > 0:
                                 logging.warning('transaction_id')
                                 logging.warning(transaction_id)
-                                data =  {
+                                data =  '''{
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
-                                    "Id": p['Id'],
-                                    "Error": False,
+                                    "Id": ''' + str(p['Id']) + ''',
                                     "Type": "UploadPumpTransaction",
                                     "Message": "OK",
                                 }]
-                                }
+                                }'''
                             else:
                                 logging.warning('no pudo ser creada')
-                                data = {
+                                data = '''{
                                     "Protocol": "jsonPTS",
                                     "Packets": [{
                                         "Id": p['Id'],
@@ -79,10 +78,10 @@ class PosRoute(http.Controller):
                                         "Code": 1,
                                         "Message": "Couldn't been created",
                                     }]
-                                    }
+                                    }'''
 
                         else:
-                            data = {
+                            data = '''{
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
                                     "Id": p['Id'],
@@ -91,7 +90,7 @@ class PosRoute(http.Controller):
                                     "Code": 28,
                                     "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
                                 }]
-                                }
+                                }'''
         logging.warning(data)
 
         return data
