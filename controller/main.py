@@ -72,9 +72,9 @@ class PosRoute(http.Controller):
                                 data = '''{
                                     "Protocol": "jsonPTS",
                                     "Packets": [{
-                                        "Id": p['Id'],
+                                        "Id": ''' + str(p['Id']) +''',
                                         "Type": "UploadPumpTransaction",
-                                        "Error": True,
+                                        "Error": true,
                                         "Code": 1,
                                         "Message": "Couldn't been created",
                                     }]
@@ -84,9 +84,9 @@ class PosRoute(http.Controller):
                             data = '''{
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
-                                    "Id": p['Id'],
+                                    "Id":  ''' + str(p['Id']) +''',
                                     "Type": "UploadPumpTransaction",
-                                    "Error": True,
+                                    "Error": true,
                                     "Code": 28,
                                     "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
                                 }]
