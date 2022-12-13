@@ -62,10 +62,10 @@ class PosRoute(http.Controller):
                                 data =  {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
-                                    "Id": transaction_id.request_id,
+                                    "Id": p['Id'],
+                                    "Error": False,
                                     "Type": "UploadPumpTransaction",
                                     "Message": "OK",
-                                    'Data':  p['Data'],
                                 }]
                                 }
                             else:
