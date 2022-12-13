@@ -98,8 +98,8 @@ class PosRoute(http.Controller):
         logging.warning(data)
         url = "https://ibriman.odoo.com/"
         headers = {'Content-type': 'application/json'}
-        request = requests.post(url, data=json.dumps(values), headers=headers)
-        response = request.json()
+        request_f = requests.post(url, data=json.dumps(values), headers=headers)
+        response = request_f.json()
 
         return response
         #return data
