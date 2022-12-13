@@ -96,8 +96,10 @@ class PosRoute(http.Controller):
 
         #request._json_response = self.alternative_json_response.__get__(request, request.dispatcher.jsonrequest)
         logging.warning(data)
-        headers = {'Content-Type': 'application/json'}
-        data = json.loads(request.httprequest.data)
-        body = data
-        return data.get('result', {})
+        url = "https://ibriman.odoo.com/"
+        headers = {'Content-type': 'application/json'}
+        request = requests.post(url, data=json.dumps(values), headers=headers)
+        response = request.json()
+
+        return response
         #return data
