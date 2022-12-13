@@ -12,12 +12,13 @@
     'website': "",
 
     'category': 'Uncategorized',
-    'version': '0.1',
+    'version': '0.2',
 
     'depends': ['point_of_sale','web'],
 
     'data': [
         'views/product_template_views.xml',
+        'views/pos_technotrade_views.xml',
         #'views/pos_restaurant_views.xml',
         'views/product_views.xml',
     ],

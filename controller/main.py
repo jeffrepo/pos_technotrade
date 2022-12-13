@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 
 class PosRoute(http.Controller):
 
-    
+
     def alternative_json_response(self, result=None, error=None):
         if error is not None:
             response = error
@@ -28,12 +28,67 @@ class PosRoute(http.Controller):
 
     @http.route('/web/transaction', type='json', methods=['POST'],auth='none', csrf=False)
     def get_sessions(self):
-        
+
         logging.warning('EXTERNAL POS TECHNOTRADE CONECTION HTTP')
         json_data = json.loads(request.httprequest.data)
         logging.warning(json_data)
-        
-        data = {"code": 300, "message": "error"}
+        if json_data:
+            if 'Packets' in json_data and len(json_data['Packets']) > 0:
+                for p in json_data['Packets']:
+                    if 'Type' in p and 'UploadPumpTransaction' == p['Type'] and 'Data' in p:
+                        transaction = p['Data']['Transaction']
+                        transaction_exist = self.env['pos_technotrade.transaction'].search([('transaction','=', transaction )])
+
+                        if len(transaction_exist) == 0:
+                            transaction_dic = {
+                                'pump':  p['Data']['Pump'],
+                                'nozzle': p['Data']['Nozzle'],
+                                'fuel_grade_id': p['Data']['FuelGradeId'],
+                                'fuel_grade_name': p['Data']['FuelGradeName'],
+                                'datetime': p['Data']['DateTime'],
+                                'volumne': p['Data']['Volumne'],
+                                'amount': p['Data']['Amount'],
+                                'price': p['Data']['Price'],
+                                'total_volume': p['Data']['TotalVolume'],
+                                'total_amount': p['Data']['TotalAmount'],
+                            }
+                            transaction_id = self.env['pos_technotrade.transaction'].create(transaction_dic)
+                            if len(transaction_id) > 0:
+                                logging.warning('transaction_id')
+                                logging.warning(transaction_id)
+                                data = ''' {
+                                "Protocol": "jsonPTS",
+                                "Packets": [{
+                                    "Id": 1,
+                                    "Type": "RequestMessageType",
+                                    "Message": "OK"
+                                }]
+                                } '''
+                            else:
+                                data = '''
+                                    {
+                                    "Protocol": "jsonPTS",
+                                    "Packets": [{
+                                        "Id": 1,
+                                        "Type": "RequestMessageType",
+                                        "Error": true,
+                                        "Code": 1,
+                                        "Message": "Couldn't been created",
+                                    }]
+                                    }
+                                '''
+                        else:
+                            data = '''
+                                {
+                                "Protocol": "jsonPTS",
+                                "Packets": [{
+                                    "Id": 1,
+                                    "Type": "RequestMessageType",
+                                    "Error": true,
+                                    "Code": 1,
+                                    "Message": "Transaction already exist",
+                                }]
+                                }
+                            '''
 
         return data
-

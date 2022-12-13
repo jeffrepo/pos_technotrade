@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="pos_technotrade_transaction_view" model="ir.ui.view">
+      <field name="name">pos_technotrade.transaction.form</field>
+      <field name="model">pos_technotrade.transaction</field>
+      <field name="arch" type="xml">
+          <form>
+              <sheet>
+                  <group>
+                      <field name="transaction"/>
+                      <field name="pump"/>
+                      <field name="nozzle"/>
+                      <field name="fuel_grade_id"/>
+                      <field name="fuel_grade_name"/>
+                      <field name="datetime"/>
+
+                  </group>
+                  <group>
+                      <field name="volumne"/>
+                      <field name="amount"/>
+                      <field name="price"/>
+                      <field name="total_volume"/>
+                      <field name="total_amount"/>
+                      <field name="configuration_id"/>
+                  </group>
+              </sheet>
+          </form>
+      </field>
+  </record>
+
+  <record id="view_pos_technotrade_transaction_tree" model="ir.ui.view">
+      <field name="name">pos_technotrade.transaction.tree</field>
+      <field name="model">pos_technotrade.transaction</field>
+      <field name="arch" type="xml">
+          <tree string="Transactions" create="0" sample="1">
+              <field name="transaction"/>
+              <field name="pump"/>
+              <field name="nozzle"/>
+              <field name="fuel_grade_id"/>
+              <field name="fuel_grade_name"/>
+              <field name="datetime"/>
+              <field name="volumne" optional="show"/>
+              <field name="amount"/>
+              <field name="price"/>
+              <field name="total_volume" optional="show"/>
+              <field name="total_amount"/>
+              <field name="configuration_id" optional="show"/>
+          </tree>
+      </field>
+  </record>
+
+
+      <record id="action_pos_technotrade_form" model="ir.actions.act_window">
+      <field name="name">Transactions</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">pos_technotrade.transaction</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="pos_technotrade.view_pos_technotrade_transaction_tree" />
+      <field name="domain">[]</field>
+      <field name="help" type="html">
+          <p class="o_view_nocontent_empty_folder">
+          </p><p>
+
+          </p>
+      </field>
+  </record>
+
+  <menuitem id="menu_pos_technotrade_transaction" parent="point_of_sale.menu_point_of_sale" action="action_pos_technotrade_form" sequence="10"/>
+
+</odoo>
