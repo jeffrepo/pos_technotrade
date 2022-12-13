@@ -37,7 +37,7 @@ class PosRoute(http.Controller):
                 for p in json_data['Packets']:
                     if 'Type' in p and 'UploadPumpTransaction' == p['Type'] and 'Data' in p:
                         transaction = p['Data']['Transaction']
-                        transaction_exist = self.env['pos_technotrade.transaction'].search([('transaction','=', transaction )])
+                        transaction_exist = request.env['pos_technotrade.transaction'].search([('transaction','=', transaction )])
 
                         if len(transaction_exist) == 0:
                             transaction_dic = {
@@ -52,7 +52,7 @@ class PosRoute(http.Controller):
                                 'total_volume': p['Data']['TotalVolume'],
                                 'total_amount': p['Data']['TotalAmount'],
                             }
-                            transaction_id = self.env['pos_technotrade.transaction'].create(transaction_dic)
+                            transaction_id = request.env['pos_technotrade.transaction'].create(transaction_dic)
                             if len(transaction_id) > 0:
                                 logging.warning('transaction_id')
                                 logging.warning(transaction_id)
