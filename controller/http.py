@@ -23,10 +23,9 @@ class JsonRPCDispatcherPatch(JsonRPCDispatcher):
             response['error'] = error
         if result is not None:
             response['result'] = result
-        if result and "Packets" in result:
-            logging.warning('response ibriman')
-            mime = 'application/json'
-            response = result
-            logging.warning(response)
+            if "Packets" in result:
+                logging.warning('response ibriman')
+                response = result
+                logging.warning(response)
 
         return self.request.make_json_response(response)
