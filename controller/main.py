@@ -10,6 +10,7 @@ from odoo.tools import date_utils
 import logging
 import requests
 _logger = logging.getLogger(__name__)
+from odoo.http import JsonRPCDispatcher
 
 class PosRoute(http.Controller):
 
@@ -96,4 +97,6 @@ class PosRoute(http.Controller):
         logging.warning(data)
         data2 = request.dispatcher.jsonrequest
         logging.warning(data2)
+        logging.warning(data2.get('result', {}))
+        request._json_response = self.alternative_json_response.__get__(request, JsonRPCDispatcher)
         return data
