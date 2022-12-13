@@ -55,7 +55,7 @@ class PosRoute(http.Controller):
                                 'total_amount': p['Data']['TotalAmount'],
                             }
                             transaction_id = request.env['pos_technotrade.transaction'].sudo().create(transaction_dic)
-                            if len(transaction_id) > 0:
+                            if len(transaction_id) == 0:
                                 logging.warning('transaction_id')
                                 logging.warning(transaction_id)
                                 data =  {
@@ -90,5 +90,6 @@ class PosRoute(http.Controller):
                                     "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
                                 }]
                                 }
+        logging.warning(data)
 
         return data
