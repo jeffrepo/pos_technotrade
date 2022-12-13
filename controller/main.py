@@ -81,13 +81,17 @@ class PosRoute(http.Controller):
                                 '''
                         else:
                             logging.warning('ya existe')
-                            data = ''' {
-                                "Protocol": "jsonPTS",
-                                "Packets": [{
-                                    "Id": 1,
-                                    "Type": "RequestMessageType",
-                                    "Message": "Ya existe"
-                                }]
-                                } '''
+                                data = '''
+                                    {
+                                    "Protocol": "jsonPTS",
+                                    "Packets": [{
+                                        "Id": 1,
+                                        "Type": "RequestMessageType",
+                                        "Error": true,
+                                        "Code": 1,
+                                        "Message": "Couldn't been created Again",
+                                    }]
+                                    }
+                                '''
 
         return data
