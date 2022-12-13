@@ -8,8 +8,6 @@ from odoo.http import request, Response
 from odoo.tools.translate import _
 from odoo.tools import date_utils
 import logging
-from werkzeug.wrappers import Request, Response
-
 import requests
 _logger = logging.getLogger(__name__)
 
@@ -28,7 +26,7 @@ class PosRoute(http.Controller):
             headers=[('Content-Type', mime), ('Content-Length', len(body))]
         )
 
-    @http.route('/web/transaction', type='http', methods=['POST'],auth='none', csrf=False)
+    @http.route('/web/transaction', type='json', methods=['POST'],auth='none', csrf=False)
     def get_sessions(self):
 
         logging.warning('EXTERNAL POS TECHNOTRADE CONECTION HTTP')
@@ -96,10 +94,6 @@ class PosRoute(http.Controller):
 
         #request._json_response = self.alternative_json_response.__get__(request, request.dispatcher.jsonrequest)
         logging.warning(data)
-        url = "https://ibriman.odoo.com/"
-        headers = {'Content-type': 'application/json'}
-        request_f = requests.post(url, data=json.dumps(data), headers=headers)
-        response = request_f.json()
-
-        return response
-        #return data
+        data2 = request.dispatcher.jsonrequest
+        logging.warning(data2)
+        return data
