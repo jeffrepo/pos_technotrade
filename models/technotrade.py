@@ -30,3 +30,4 @@ class PosTechnotradeTransaction(models.Model):
     total_volume = fields.Float('Total volume')
     total_amount = fields.Float('Total amount')
     configuration_id = fields.Char('ConfigurationId')
+    request_id = fields.Integer('Packet')

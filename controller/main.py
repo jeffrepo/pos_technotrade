@@ -44,6 +44,7 @@ class PosRoute(http.Controller):
                             transaction_dic = {
                                 'transaction': p['Data']['Transaction'],
                                 'pump':  p['Data']['Pump'],
+                                'request_id: 'p['Data']['Id'],
                                 'nozzle': p['Data']['Nozzle'],
                                 'fuel_grade_id': p['Data']['FuelGradeId'],
                                 'fuel_grade_name': p['Data']['FuelGradeName'],
@@ -61,7 +62,7 @@ class PosRoute(http.Controller):
                                 data =  {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
-                                    "Id": 1,
+                                    "Id": transaction_id.request_id,
                                     "Type": "RequestMessageType",
                                     "Message": "OK"
                                 }]
@@ -71,7 +72,7 @@ class PosRoute(http.Controller):
                                 data = {
                                     "Protocol": "jsonPTS",
                                     "Packets": [{
-                                        "Id": 1,
+                                        "Id": p['Data']['Id'],
                                         "Type": "RequestMessageType",
                                         "Error": 'true',
                                         "Code": 1,
@@ -83,7 +84,7 @@ class PosRoute(http.Controller):
                             data = {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
-                                    "Id": 1,
+                                    "Id": p['Data']['Id'],
                                     "Type": "RequestMessageType",
                                     "Error": True,
                                     "Code": 28,
