@@ -63,7 +63,7 @@ class PosRoute(http.Controller):
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
                                     "Id": transaction_id.request_id,
-                                    "Type": "RequestMessageType",
+                                    "Type": "UploadPumpTransaction",
                                     "Message": "OK"
                                 }]
                                 }
@@ -73,8 +73,8 @@ class PosRoute(http.Controller):
                                     "Protocol": "jsonPTS",
                                     "Packets": [{
                                         "Id": p['Id'],
-                                        "Type": "RequestMessageType",
-                                        "Error": 'true',
+                                        "Type": "UploadPumpTransaction",
+                                        "Error": True,
                                         "Code": 1,
                                         "Message": "Couldn't been created",
                                     }]
@@ -85,7 +85,7 @@ class PosRoute(http.Controller):
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
                                     "Id": p['Id'],
-                                    "Type": "RequestMessageType",
+                                    "Type": "UploadPumpTransaction",
                                     "Error": True,
                                     "Code": 28,
                                     "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
