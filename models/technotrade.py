@@ -23,6 +23,7 @@ class PosTechnotradeTransaction(models.Model):
     fuel_grade_id = fields.Integer('Fuel grade id')
     fuel_grade_name = fields.Char('Fuel grade name')
     datetime = fields.Datetime('Datetime')
+    datetime_text = fields.Datetime('Datetime Text')
     volumne = fields.Float('Volumne')
     amount = fields.Float('Amount')
     price = fields.Float('price')

@@ -14,6 +14,7 @@
                       <field name="fuel_grade_id"/>
                       <field name="fuel_grade_name"/>
                       <field name="datetime"/>
+                      <field name="datetime_text"/>
 
                   </group>
                   <group>
@@ -40,6 +41,7 @@
               <field name="fuel_grade_id"/>
               <field name="fuel_grade_name"/>
               <field name="datetime"/>
+              <field name="datetime_text"/>
               <field name="volumne" optional="show"/>
               <field name="amount"/>
               <field name="price"/>

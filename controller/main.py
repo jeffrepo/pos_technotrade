@@ -45,7 +45,7 @@ class PosRoute(http.Controller):
                                 'nozzle': p['Data']['Nozzle'],
                                 'fuel_grade_id': p['Data']['FuelGradeId'],
                                 'fuel_grade_name': p['Data']['FuelGradeName'],
-                                'datetime': p['Data']['DateTime'],
+                                'datetime_text': p['Data']['DateTime'],
                                 'volumne': p['Data']['Volume'],
                                 'amount': p['Data']['Amount'],
                                 'price': p['Data']['Price'],
