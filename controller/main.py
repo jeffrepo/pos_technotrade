@@ -91,6 +91,8 @@ class PosRoute(http.Controller):
                                     "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
                                 }]
                                 }'''
+
+        request._json_response = self.alternative_json_response.__get__(request, JsonRequest)                        
         logging.warning(data)
 
         return data
