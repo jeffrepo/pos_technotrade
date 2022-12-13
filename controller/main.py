@@ -66,6 +66,7 @@ class PosRoute(http.Controller):
                                 }]
                                 } '''
                             else:
+                                logging.warning('no pudo ser creada')
                                 data = '''
                                     {
                                     "Protocol": "jsonPTS",
@@ -79,17 +80,14 @@ class PosRoute(http.Controller):
                                     }
                                 '''
                         else:
-                            data = '''
-                                {
+                            logging.warning('ya existe')
+                            data = ''' {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
                                     "Id": 1,
                                     "Type": "RequestMessageType",
-                                    "Error": true,
-                                    "Code": 1,
-                                    "Message": "Transaction already exist",
+                                    "Message": "Ya existe"
                                 }]
-                                }
-                            '''
+                                } '''
 
         return data
