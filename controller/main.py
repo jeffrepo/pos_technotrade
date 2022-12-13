@@ -58,17 +58,17 @@ class PosRoute(http.Controller):
                             if len(transaction_id) > 0:
                                 logging.warning('transaction_id')
                                 logging.warning(transaction_id)
-                                data = ''' {
+                                data =  {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
                                     "Id": 1,
                                     "Type": "RequestMessageType",
                                     "Message": "OK"
                                 }]
-                                } '''
+                                }
                             else:
                                 logging.warning('no pudo ser creada')
-                                data = '''
+                                data =
                                     {
                                     "Protocol": "jsonPTS",
                                     "Packets": [{
@@ -79,6 +79,18 @@ class PosRoute(http.Controller):
                                         "Message": "Couldn't been created",
                                     }]
                                     }
-                                '''
+
+                        else:
+                            data =
+                                {
+                                "Protocol": "jsonPTS",
+                                "Packets": [{
+                                    "Id": 1,
+                                    "Type": "RequestMessageType",
+                                    "Error": true,
+                                    "Code": 28,
+                                    "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
+                                }]
+                                }
 
         return data
