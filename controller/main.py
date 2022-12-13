@@ -28,7 +28,7 @@ class PosRoute(http.Controller):
             headers=[('Content-Type', mime), ('Content-Length', len(body))]
         )
 
-    @http.route('/web/transaction', type='json', methods=['POST'],auth='none', csrf=False)
+    @http.route('/web/transaction', type='http', methods=['POST'],auth='none', csrf=False)
     def get_sessions(self):
 
         logging.warning('EXTERNAL POS TECHNOTRADE CONECTION HTTP')
