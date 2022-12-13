@@ -44,7 +44,7 @@ class PosRoute(http.Controller):
                             transaction_dic = {
                                 'transaction': p['Data']['Transaction'],
                                 'pump':  p['Data']['Pump'],
-                                'request_id: 'p['Data']['Id'],
+                                'request_id': p['Data']['Id'],
                                 'nozzle': p['Data']['Nozzle'],
                                 'fuel_grade_id': p['Data']['FuelGradeId'],
                                 'fuel_grade_name': p['Data']['FuelGradeName'],
