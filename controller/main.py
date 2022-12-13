@@ -97,7 +97,7 @@ class PosRoute(http.Controller):
         #request._json_response = self.alternative_json_response.__get__(request, request.dispatcher.jsonrequest)
         logging.warning(data)
         headers = {'Content-Type': 'application/json'}
-
+        data = json.loads(request.httprequest.data)
         body = data
-        return Response(json.dumps(body), headers=headers)
+        return data.get('result', {})
         #return data
