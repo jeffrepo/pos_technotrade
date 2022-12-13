@@ -22,6 +22,9 @@ class PosRoute(http.Controller):
             response = result
         mime = 'application/json'
         body = json.dumps(response, default=date_utils.json_default)
+        logging.warning('BODY JEFF')
+        logging.warning(response)
+        logging.warning(body)
         return Response(
             body, status=error and error.pop('http_status', 200) or 200,
             headers=[('Content-Type', mime), ('Content-Length', len(body))]
@@ -60,43 +63,39 @@ class PosRoute(http.Controller):
                             if len(transaction_id) > 0:
                                 logging.warning('transaction_id')
                                 logging.warning(transaction_id)
-                                data =  '''{
+                                data =  {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
-                                    "Id": ''' + str(p['Id']) + ''',
+                                    "Id": p['Id'],
                                     "Type": "UploadPumpTransaction",
                                     "Message": "OK",
                                 }]
-                                }'''
+                                }
                             else:
                                 logging.warning('no pudo ser creada')
-                                data = '''{
+                                data = {
                                     "Protocol": "jsonPTS",
                                     "Packets": [{
-                                        "Id": ''' + str(p['Id']) +''',
+                                        "Id": p['Id'],
                                         "Type": "UploadPumpTransaction",
-                                        "Error": true,
+                                        "Error": True,
                                         "Code": 1,
                                         "Message": "Couldn't been created",
                                     }]
-                                    }'''
+                                    }
 
                         else:
-                            data = '''{
+                            data = {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
-                                    "Id":  ''' + str(p['Id']) +''',
+                                    "Id":  p['Id'],
                                     "Type": "UploadPumpTransaction",
-                                    "Error": true,
+                                    "Error": True,
                                     "Code": 28,
                                     "Message": "JSONPTS_ERROR_TRANSACTION_NUMBER_ALREADY_EXIST",
                                 }]
-                                }'''
+                                }
 
-        #request._json_response = self.alternative_json_response.__get__(request, request.dispatcher.jsonrequest)
+
         logging.warning(data)
-        data2 = request.dispatcher.jsonrequest
-        logging.warning(data2)
-        logging.warning(data2.get('result', {}))
-        request._json_response = self.alternative_json_response.__get__(request, JsonRPCDispatcher)
         return data
