@@ -68,8 +68,7 @@ class PosRoute(http.Controller):
                                 }
                             else:
                                 logging.warning('no pudo ser creada')
-                                data =
-                                    {
+                                data = {
                                     "Protocol": "jsonPTS",
                                     "Packets": [{
                                         "Id": 1,
@@ -81,8 +80,7 @@ class PosRoute(http.Controller):
                                     }
 
                         else:
-                            data =
-                                {
+                            data = {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{
                                     "Id": 1,
