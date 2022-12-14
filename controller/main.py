@@ -42,7 +42,9 @@ class PosRoute(http.Controller):
                 for p in json_data['Packets']:
                     if 'Type' in p and 'UploadPumpTransaction' == p['Type'] and 'Data' in p:
                         transaction = p['Data']['Transaction']
-                        transaction_exist = request.env['pos_technotrade.transaction'].sudo().search([('transaction','=', transaction )])
+                        pump = p['Data']['Pump']
+                        nozzle = p['Data']['Nozzle']
+                        transaction_exist = request.env['pos_technotrade.transaction'].sudo().search([('transaction','=', transaction ),('pump','=', pump ),('nozzle','=', nozzle )])
 
                         if len(transaction_exist) == 0:
                             transaction_dic = {
