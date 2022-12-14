@@ -15,17 +15,31 @@ _logger = logging.getLogger(__name__)
 
 class JsonRPCDispatcherPatch(JsonRPCDispatcher):
 
+    # def _response(self, result=None, error=None):
+    #     request_id = self.jsonrequest.get('id')
+    #     response = {'jsonrpc': '1.0', 'id': request_id}
+    #
+    #     if error is not None:
+    #         response['error'] = error
+    #     if result is not None:
+    #         response['result'] = result
+    #         if "Packets" in result:
+    #             logging.warning('response ibriman')
+    #             response = result
+    #             logging.warning(response)
+    #
+    #     return self.request.make_json_response(response)
+
     def _response(self, result=None, error=None):
-        request_id = self.jsonrequest.get('id')
-        response = {'jsonrpc': '1.0', 'id': request_id}
+        res = super(JsonRPCDispatcherPatch, self)._response(result,error)
+        logging.warning('res response')
+        logging.warning(result)
+        logging.warning(res)
 
-        if error is not None:
-            response['error'] = error
-        if result is not None:
-            response['result'] = result
+        if type(result) is dict:
             if "Packets" in result:
-                logging.warning('response ibriman')
-                response = result
-                logging.warning(response)
-
-        return self.request.make_json_response(response)
+                return self.request.make_json_response(result)
+            else:
+                return res
+        else:
+            return res
