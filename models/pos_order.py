@@ -43,7 +43,7 @@ class PosOrder(models.Model):
         return res
 
     def technotrade_connection(self, data):
-        url = "https://200.40.56.90/"
+        url = "https://200.40.56.90/jsonPTS"
         headers = {
           'Content-Type': 'application/json',
           #'Authorization': 'Bearer '+str(refresh_token_config)
