@@ -43,7 +43,7 @@ class PosOrder(models.Model):
         return res
 
     def technotrade_connection(self, data):
-        url = "https://epikpts.ddns.net/jsonPTS"
+        url = "https://200.40.56.90/"
         headers = {
           'Content-Type': 'application/json',
           #'Authorization': 'Bearer '+str(refresh_token_config)
@@ -136,7 +136,7 @@ class PosOrder(models.Model):
                                 logging.warning(nozzle_data)
                                 data['product_id'] = product_dic[nozzle_data]
                                 transactions.append(data)
-                                
+
         logging.warning('RESPONSE  PUPM T')
         logging.warning(transactions)
         return transactions
@@ -150,11 +150,11 @@ class PosOrder(models.Model):
 
             }]
         }"""
-        
+
         response_technotrade = self.technotrade_connection(data)
         logging.warning("RESPONSE TECHNOTRASE get_fuel_grades_configuration")
         logging.warning(response_technotrade)
-        if len(response_technotrade) > 0:        
+        if len(response_technotrade) > 0:
             if "Data" in response_technotrade[0] and len(response_technotrade[0]["Data"]) > 0:
                 if "FuelGrades" in response_technotrade[0]["Data"] and len(response_technotrade[0]["Data"]["FuelGrades"]) > 0:
                     product_ids = self.env['product.template'].search([('nozzle','>', 0)])
@@ -163,7 +163,7 @@ class PosOrder(models.Model):
                         for p in product_ids:
                             if p.nozzle not in product_dic:
                                 product_dic[int(p.nozzle)] = p
-                                
+
                     for p in response_technotrade[0]["Data"]["FuelGrades"]:
                         if p["Id"] in product_dic:
                             product_dic[p["Id"]].update({'name':  p["Name"],'nozzle': p["Id"], 'detailed_type': 'product', 'available_in_pos': True, 'list_price': p["Price"]})
@@ -171,7 +171,7 @@ class PosOrder(models.Model):
                             pt = self.env['product.template'].create({'name':  p["Name"], 'nozzle': p["Id"], 'list_price': p["Price"], 'detailed_type': 'product', 'available_in_pos': True})
                             logging.warning(pt)
         return True
-    
+
     def get_pump_nozzles_onfiguration(self):
         logging.warning('ENTRA get_pump_nozzles_onfiguration')
         self.get_fuel_grades_configuration()
@@ -209,7 +209,7 @@ class PosOrder(models.Model):
 
         return True
 
-     
+
 class PosOrderLine(models.Model):
     _inherit = "pos.order.line"
 
