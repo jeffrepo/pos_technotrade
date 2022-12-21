@@ -7,3 +7,4 @@ class ProductTemplate(models.Model):
 
     nozzle_ids = fields.Many2many('technotrade.nozzle',string='Nozzles')
     nozzle = fields.Integer('Nozzle')
+    fuel_grade_id = fields.Integer('Fuel grade id')

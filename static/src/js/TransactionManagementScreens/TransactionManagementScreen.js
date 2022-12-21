@@ -43,7 +43,9 @@ odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
                 (flexContainer.offsetHeight - cpEl.offsetHeight - headerEl.offsetHeight) /
                     headerEl.offsetHeight
             );
-            TransactionFetcher.setNPerPage(val);
+            console.log('el val')
+            console.log(val)
+            TransactionFetcher.setNPerPage(500);
 
             // Fetch the order after mounting so that order management screen
             // is shown while fetching.
@@ -65,7 +67,7 @@ odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
             console.log(' Transaction get orders_test fetches in ManagementScreen js')
             return TransactionFetcher.get();
         }
-        
+
         async _setNumpadMode(event) {
             const { mode } = event.detail;
             this.numpadMode = mode;
@@ -90,7 +92,7 @@ odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
             const { confirmed, payload: selectedOption } = await this.showPopup('SelectionPopup',
                 {
                     title: this.env._t('What do you want to do?'),
-                    list: [{id:"0", label: this.env._t("Apply a down payment"), item: false}, {id:"1", label: this.env._t("Settle the order"), item: true}],
+                    list: [{id:"1", label: this.env._t("Agregar al pedido"), item: true}],
                 });
 
             if(confirmed){
@@ -103,24 +105,34 @@ odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
 
 
               if (selectedOption){
+                console.log('producto')
+                console.log(this.env.pos.db.get_product_by_id(clickedTransaction['product_id']))
+                console.log('clickedTransaction');
+                console.log(clickedTransaction);
+                var transaction_x = clickedTransaction.id
                 let new_line = Orderline.create({}, {
                     pos: this.env.pos,
                     order: this.env.pos.get_order(),
                     product: this.env.pos.db.get_product_by_id(clickedTransaction['product_id']),
-                    description: clickedTransaction.Transaction,
-                    price: clickedTransaction.TotalAmount,
+                    description: clickedTransaction.fuel_grade_name,
+                    price: clickedTransaction.total_amount,
                     price_manually_set: true,
-                    transaction: clickedTransaction.Transaction,
-                    nozzle: clickedTransaction.Nozzle,
-                    pump: clickedTransaction.Pump,
+                    transaction: clickedTransaction.id,
+                    has_product_lot: 'none',
+                    tracking: 'none',
+                    nozzle: clickedTransaction.nozzle,
+                    pump: clickedTransaction.pump,
                 });
-
-                    //new_line.set_transaction(clickedTransaction.Transaction);
+                    console.log('New Line');
+                    console.log(new_line);
+                    console.log(clickedTransaction);
+                    new_line.set_transaction(transaction_x);
+                    console.log(new_line)
                     //new_line.setQuantityFromSOL(line);
-                    //new_line.set_unit_price(clickedTransaction.TotalAmount);
+                    //new_line.set_unit_price(clickedTransaction.total_amount);
                     //new_line.set_discount(line.discount);
-                    this.env.pos.get_order().add_orderline(new_line);                  
-                  
+                    this.env.pos.get_order().add_orderline(new_line);
+
               }
 
               this.close();

@@ -17,9 +17,6 @@ class JsonRPCDispatcherPatch(JsonRPCDispatcher):
 
     def _response(self, result=None, error=None):
         res = super(JsonRPCDispatcherPatch, self)._response(result,error)
-        logging.warning('res response')
-        logging.warning(result)
-        logging.warning(res)
 
         if type(result) is dict:
             if "Packets" in result:

@@ -33,18 +33,33 @@ odoo.define('pos_technotrade.TransactionRow', function (require) {
         }
         get transaction(){
             console.log('Transaction id')
-            console.log(this.order.Transaction)
-            return this.order.Transaction
+            console.log(this.order.transaction)
+            return this.order.transaction
         }
         get nozzle(){
-            return this.order.Nozzle
+            return this.order.nozzle
         }
         
         get pump(){
-            return this.order.Pump
+            return this.order.pump
         }
+        get fuel_grade_name(){
+            return this.order.fuel_grade_name
+        }
+        get volume(){
+            return this.order.volume
+        }
+        get amount(){
+            return this.order.amount
+        }
+        get price(){
+            return this.order.price
+        }
+        get total_volume(){
+            return this.order.total_volume
+        }            
         get totalamount(){
-            return this.order.TotalAmount
+            return this.order.total_amount
         } 
         get date() {
             return moment(this.order.date_order).format('YYYY-MM-DD hh:mm A');
