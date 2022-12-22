@@ -8,6 +8,11 @@
                 <div class="col date">Date</div>
                 <div class="col pump">Pump</div>
                 <div class="col nozzle">Nozzle</div>
+                <div class="col fuel">Fuel grade name</div>
+                <div class="col volumen">Volume</div>
+                <div class="col amount">Amount</div>
+                <div class="col price">Price</div>
+                <div class="col totalvolumen">Total volumen</div>
                 <div class="col nozzle">Total</div>
 <!-- <div class="col name">Order</div>
 <div class="col date">Date</div>
@@ -17,7 +22,7 @@
 <div class="col state">State</div> -->
             </div>
             <div class="order-list">
-                <t t-foreach="props.orders" t-as="order" t-key="order.Transaction">
+                <t t-foreach="props.orders" t-as="order" t-key="order.id">
                     <TransactionRow order="order" highlightedTransaction="highlightedTransaction" />
                 </t>
             </div>

@@ -11,7 +11,7 @@ odoo.define('pos_technotrade.TransactionFetcher', function (require) {
             super();
             this.currentPage = 1;
             this.ordersToShow = [];
-            this.transactionToShow = {};
+            this.transactionToShow = [];
             this.totalCount = 0;
         }
 

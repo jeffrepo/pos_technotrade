@@ -15,10 +15,12 @@
                       <field name="fuel_grade_name"/>
                       <field name="datetime"/>
                       <field name="datetime_text"/>
+                      <field name="pos_order_line_id"/>
 
                   </group>
                   <group>
                       <field name="volumne"/>
+                      <field name="product_id"/>
                       <field name="amount"/>
                       <field name="price"/>
                       <field name="total_volume"/>
@@ -37,6 +39,8 @@
           <tree string="Transactions" create="0" sample="1">
               <field name="transaction"/>
               <field name="pump"/>
+              <field name="product_id"/>
+              <field name="pos_order_line_id"/>
               <field name="nozzle"/>
               <field name="fuel_grade_id"/>
               <field name="fuel_grade_name"/>
