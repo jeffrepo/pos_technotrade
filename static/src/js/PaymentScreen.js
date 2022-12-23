@@ -1,4 +1,4 @@
-odoo.define('pos_technotrade.PosTechPaymentScreen', function (require) {
+odoo.define('pos_technotrade.PosTechrPaymentScreen', function (require) {
     'use strict';
 
     const PaymentScreen = require('point_of_sale.PaymentScreen');
@@ -7,15 +7,12 @@ odoo.define('pos_technotrade.PosTechPaymentScreen', function (require) {
     // var rpc = require('web.rpc');
     var models = require('point_of_sale.models');
 
-    const PosTechPaymentScreen = (PaymentScreen) =>
+    const PosTechrPaymentScreen = (PaymentScreen) =>
         class extends PaymentScreen {
           async validateOrder(isForceValidate) {
               console.log('this.get_customer_values()');
               console.log(this.get_customer_values());
               if(await this.get_customer_values() == true){
-                  console.log('SUPER');
-                  console.log('');
-                  console.log('');
                   super.validateOrder();
               }
 
@@ -29,32 +26,18 @@ odoo.define('pos_technotrade.PosTechPaymentScreen', function (require) {
           async get_customer_values(){
             var self = this;
             var order = this.env.pos.get_order();
-            console.log('Que tal fritos?');
-            console.log('');
-            console.log(order);
-            console.log('');
-            console.log(order.partner.id);
-            console.log(order.paymentlines);
             var payment_method_x = false;
             var amount_total = 0;
             if (order.paymentlines){
               for(const i in order.paymentlines){
 
                 if(order.paymentlines[i]['payment_method']['type'] == "pay_later"){
-                  console.log('i');
-                  console.log(i);
-                  console.log('');
-                  console.log('');
                   payment_method_x = true;
                   amount_total += order.paymentlines[i]['amount']
                 }
 
               }
             }
-            console.log('payment_method_x ');
-            console.log(payment_method_x);
-            console.log('');
-            console.log('');
             if(payment_method_x == true){
 
               try{
@@ -100,7 +83,7 @@ odoo.define('pos_technotrade.PosTechPaymentScreen', function (require) {
         }
 
 
-    Registries.Component.extend(PaymentScreen, PosTechPaymentScreen);
+    Registries.Component.extend(PaymentScreen, PosTechrPaymentScreen);
 
-    return PosTechPaymentScreen;
+    return PosTechrPaymentScreen;
 });
