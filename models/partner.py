@@ -21,18 +21,12 @@ class ResPartner(models.Model):
         logging.warning('Welcome to values_partner')
         partner = self.env['res.partner'].search([('id', '=', partner_id)])
         if partner:
-            logging.warning('partner')
-            logging.warning(partner)
-            logging.warning(partner.use_partner_credit_limit)
             if partner.use_partner_credit_limit:
                 if partner.property_payment_term_id:
                     logging.warning('partner.property_payment_term_id')
-                    logging.warning(partner.property_payment_term_id)
+
                     if partner.property_payment_term_id.line_ids[0].months != 0 or partner.property_payment_term_id.line_ids[0].days != 0:
-                        logging.warning('')
-                        logging.warning('')
-                        logging.warning(partner.property_payment_term_id.line_ids[0].months)
-                        logging.warning(partner.property_payment_term_id.line_ids[0].days)
+
                         new_amount = amount + partner.credit
                         logging.warning('new_amount')
                         logging.warning(new_amount)
