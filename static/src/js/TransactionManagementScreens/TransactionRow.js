@@ -62,7 +62,7 @@ odoo.define('pos_technotrade.TransactionRow', function (require) {
             return this.order.total_amount
         } 
         get date() {
-            return moment(this.order.date_order).format('YYYY-MM-DD hh:mm A');
+            return moment(this.order.date).format('YYYY-MM-DD GGGG, hh:mm A');
         }
         get partner() {
             const partner = this.order.partner_id;
