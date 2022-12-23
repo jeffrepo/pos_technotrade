@@ -18,11 +18,6 @@ odoo.define('pos_technotrade.PosTechrPaymentScreen', function (require) {
 
           }
 
-          // x_function (){
-          //   this.get_customer_values();
-          // }
-
-
           async get_customer_values(){
             var self = this;
             var order = this.env.pos.get_order();

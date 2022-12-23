@@ -196,7 +196,9 @@ class PosOrderLine(models.Model):
         logging.warning(res)
         logging.warning(line)
         logging.warning('')
-        x_transaction = line[2]['transaction']
+        x_transaction = False
+        if line and line[2] and 'transaction' in line[2]:
+            x_transaction = line[2]['transaction']
         res[2]['transaction_id']=[[6, False,[x_transaction]]]
         logging.warning(res)
         logging.warning('')
