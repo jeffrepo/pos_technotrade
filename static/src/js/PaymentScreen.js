@@ -1,4 +1,4 @@
-odoo.define('pos_technotrade.PosTechPaymentScreen', function (require) {
+odoo.define('pos_technotrade.PosTechrPaymentScreen', function (require) {
     'use strict';
 
     const PaymentScreen = require('point_of_sale.PaymentScreen');
@@ -7,7 +7,7 @@ odoo.define('pos_technotrade.PosTechPaymentScreen', function (require) {
     // var rpc = require('web.rpc');
     var models = require('point_of_sale.models');
 
-    const PosTechPaymentScreen = (PaymentScreen) =>
+    const PosTechrPaymentScreen = (PaymentScreen) =>
         class extends PaymentScreen {
           async validateOrder(isForceValidate) {
               console.log('this.get_customer_values()');
@@ -100,7 +100,7 @@ odoo.define('pos_technotrade.PosTechPaymentScreen', function (require) {
         }
 
 
-    Registries.Component.extend(PaymentScreen, PosTechPaymentScreen);
+    Registries.Component.extend(PaymentScreen, PosTechrPaymentScreen);
 
-    return PosTechPaymentScreen;
+    return PosTechrPaymentScreen;
 });
