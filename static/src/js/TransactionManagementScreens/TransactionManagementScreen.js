@@ -1,106 +1,156 @@
-odoo.define('pos_technotrade.PosTechrPaymentScreen', function (require) {
+odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
     'use strict';
 
-    const PaymentScreen = require('point_of_sale.PaymentScreen');
+    const { sprintf } = require('web.utils');
+    const { parse } = require('web.field_utils');
     const { useListener } = require("@web/core/utils/hooks");
+    const ControlButtonsMixin = require('point_of_sale.ControlButtonsMixin');
+    const NumberBuffer = require('point_of_sale.NumberBuffer');
     const Registries = require('point_of_sale.Registries');
-    // var rpc = require('web.rpc');
-    var models = require('point_of_sale.models');
+    const TransactionFetcher = require('pos_technotrade.TransactionFetcher');
+    const IndependentToOrderScreen = require('point_of_sale.IndependentToOrderScreen');
+    const contexts = require('point_of_sale.PosContext');
+    const { Orderline } = require('point_of_sale.models');
 
-    const PosTechrPaymentScreen = (PaymentScreen) =>
-        class extends PaymentScreen {
-          async validateOrder(isForceValidate) {
-              console.log('this.get_customer_values()');
-              console.log(this.get_customer_values());
-              if(await this.get_customer_values() == true){
-                  console.log('SUPER');
-                  console.log('');
-                  console.log('');
-                  super.validateOrder();
+    const { onMounted, onWillUnmount, useState } = owl;
+
+    class TransactionManagementScreen extends ControlButtonsMixin(IndependentToOrderScreen) {
+        setup() {
+            super.setup();
+            console.log('TransactionManagementScreen')
+            useListener('close-screen', this.close);
+            useListener('click-sale-order', this._onClickSaleOrder);
+            useListener('next-page', this._onNextPage);
+            useListener('prev-page', this._onPrevPage);
+            useListener('search', this._onSearch);
+
+            TransactionFetcher.setComponent(this);
+            this.orderManagementContext = useState(contexts.orderManagement);
+
+            onMounted(this.onMounted);
+            onWillUnmount(this.onWillUnmount);
+        }
+        onMounted() {
+            TransactionFetcher.on('update', this, this.render);
+
+            // calculate how many can fit in the screen.
+            // It is based on the height of the header element.
+            // So the result is only accurate if each row is just single line.
+            const flexContainer = this.el.querySelector('.flex-container');
+            const cpEl = this.el.querySelector('.control-panel');
+            const headerEl = this.el.querySelector('.header-row');
+            const val = Math.trunc(
+                (flexContainer.offsetHeight - cpEl.offsetHeight - headerEl.offsetHeight) /
+                    headerEl.offsetHeight
+            );
+            console.log('el val')
+            console.log(val)
+            TransactionFetcher.setNPerPage(500);
+
+            // Fetch the order after mounting so that order management screen
+            // is shown while fetching.
+            setTimeout(() => TransactionFetcher.fetch(), 0);
+        }
+        onWillUnmount() {
+            TransactionFetcher.off('update', this);
+        }
+        get selectedPartner() {
+            const order = this.orderManagementContext.selectedOrder;
+            return order ? order.get_partner() : null;
+        }
+        get orders() {
+            console.log(' Transaction get orders fetches in ManagementScreen js')
+            console.log(TransactionFetcher.get())
+            return TransactionFetcher.get();
+        }
+        get orders_test(){
+            console.log(' Transaction get orders_test fetches in ManagementScreen js')
+            return TransactionFetcher.get();
+        }
+
+        async _setNumpadMode(event) {
+            const { mode } = event.detail;
+            this.numpadMode = mode;
+            NumberBuffer.reset();
+        }
+        _onNextPage() {
+            TransactionFetcher.nextPage();
+        }
+        _onPrevPage() {
+            TransactionFetcher.prevPage();
+        }
+        _onSearch({ detail: domain }) {
+            TransactionFetcher.setSearchDomain(domain);
+            TransactionFetcher.setPage(1);
+            TransactionFetcher.fetch();
+        }
+        async _onClickSaleOrder(event) {
+            const clickedTransaction = event.detail;
+            console.log('_onClickSaleOrder')
+            console.log(event)
+            console.log(event.detail)
+            const { confirmed, payload: selectedOption } = await this.showPopup('SelectionPopup',
+                {
+                    title: this.env._t('What do you want to do?'),
+                    list: [{id:"1", label: this.env._t("Agregar al pedido"), item: true}],
+                });
+
+            if(confirmed){
+              let currentPOSOrder = this.env.pos.get_order();
+              try {
+                await this.env.pos.load_new_partners();
               }
-
-          }
-
-          // x_function (){
-          //   this.get_customer_values();
-          // }
-
-
-          async get_customer_values(){
-            var self = this;
-            var order = this.env.pos.get_order();
-            console.log('Que tal fritos?');
-            console.log('');
-            console.log(order);
-            console.log('');
-            console.log(order.partner.id);
-            console.log(order.paymentlines);
-            var payment_method_x = false;
-            var amount_total = 0;
-            if (order.paymentlines){
-              for(const i in order.paymentlines){
-
-                if(order.paymentlines[i]['payment_method']['type'] == "pay_later"){
-                  console.log('i');
-                  console.log(i);
-                  console.log('');
-                  console.log('');
-                  payment_method_x = true;
-                  amount_total += order.paymentlines[i]['amount']
+              catch (_error){
+              }
+              if (selectedOption){
+                console.log('producto')
+                console.log(this.env.pos.db.get_product_by_id(clickedTransaction['product_id']))
+                console.log('clickedTransaction');
+                console.log(clickedTransaction);
+                var transaction_x = false;
+                if(clickedTransaction){
+                    if(clickedTransaction.hasOwnProperty('id')){
+                        transaction_x = clickedTransaction.id
+                    }
                 }
 
-              }
-            }
-            console.log('payment_method_x ');
-            console.log(payment_method_x);
-            console.log('');
-            console.log('');
-            if(payment_method_x == true){
-
-              try{
-                const response_partner = await this._get_response(order.partner.id, amount_total);
-                if(response_partner == true){
-                  console.log('Todo bien con el cliente');
-                  return true;
-                }else if (response_partner != true) {
-                  console.log('ha ocurrido un error');
-                  console.log(response_partner);
-                  this.showPopup('ErrorPopup', {
-                      title: this.env._t('Error'),
-                      body: this.env._t(response_partner),
-                  });
-                  return false;
-                }
-
-              }catch(error){
-                console.log('Catch error');
-                console.log(error);
-                return false;
+                let new_line = Orderline.create({}, {
+                    pos: this.env.pos,
+                    order: this.env.pos.get_order(),
+                    product: this.env.pos.db.get_product_by_id(clickedTransaction['product_id']),
+                    description: clickedTransaction.fuel_grade_name,
+                    price: clickedTransaction.total_amount,
+                    price_manually_set: true,
+                    transaction: clickedTransaction.id,
+                    has_product_lot: 'none',
+                    tracking: 'none',
+                    nozzle: clickedTransaction.nozzle,
+                    pump: clickedTransaction.pump,
+                });
+                    console.log('New Line');
+                    console.log(new_line);
+                    console.log(clickedTransaction);
+                    new_line.set_transaction(transaction_x);
+                    console.log(new_line)
+                    //new_line.setQuantityFromSOL(line);
+                    //new_line.set_unit_price(clickedTransaction.total_amount);
+                    //new_line.set_discount(line.discount);
+                    this.env.pos.get_order().add_orderline(new_line);
 
               }
 
-            }else{
-                console.log('El metodo de pago no es credito');
-                return true;
+              this.close();
             }
-
-
-          }
-
-
-          async _get_response(id_partner, amount) {
-              return await this.rpc({
-                  model: 'res.partner',
-                  method: 'values_partner',
-                  args: [[], id_partner, amount],
-              });
-          }
-
 
         }
 
 
-    Registries.Component.extend(PaymentScreen, PosTechrPaymentScreen);
 
-    return PosTechrPaymentScreen;
+    }
+    TransactionManagementScreen.template = 'TransactionManagementScreen';
+    TransactionManagementScreen.hideOrderSelector = true;
+
+    Registries.Component.add(TransactionManagementScreen);
+
+    return TransactionManagementScreen;
 });

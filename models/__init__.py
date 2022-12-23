@@ -4,3 +4,4 @@ from . import pos_order
 from . import product_template
 from . import technotrade
 #from . import pos_restaurant
+from . import partner
