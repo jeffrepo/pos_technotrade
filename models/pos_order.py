@@ -77,10 +77,11 @@ class PosOrder(models.Model):
         logging.warning('ENTRA report_pump_transactions')
         # transactions = [{'product_id': 6,'name': '', 'Transaction': 1, 'Nozzle': 2 , 'Pump': 3, 'TotalAmount': 100, 'Date': '2022-10-27T17:12:1'}]
         transactions = []
-        search_transactions = self.env['pos_technotrade.transaction'].search([('pos_order_line_id', '=', False)])
+        search_transactions = self.env['pos_technotrade.transaction'].search([('pos_order_line_id', '=', False)], order='id desc')
 
         logging.warning('TRANSACTION')
         logging.warning(search_transactions)
+        logging.warning(len(search_transactions))
         for trans in search_transactions:
             transactions.append({
             'id':trans.id,
@@ -94,8 +95,8 @@ class PosOrder(models.Model):
             'fuel_grade_name':trans.fuel_grade_name,
             'date':trans.datetime_text,
             'volume':trans.volumne,
-            'importe':trans.amount,
-            'precio':trans.price
+            'amount':trans.amount,
+            'price':trans.price
             })
         logging.warning('transactions')
         logging.warning(transactions)
@@ -199,8 +200,14 @@ class PosOrderLine(models.Model):
         x_transaction = False
         if line and line[2] and 'transaction' in line[2]:
             x_transaction = line[2]['transaction']
-        res[2]['transaction_id']=[[6, False,[x_transaction]]]
-        logging.warning(res)
-        logging.warning('')
-        logging.warning('')
-        return res
+            exist_transaction = self.env['pos_technotrade.transaction'].search([('id','=',x_transaction),('pos_order_line_id', '!=', False)])
+            if len(exist_transaction) > 0:
+                raise UserError(_("Transaccion ya está en otro pedido"))
+            else:
+                res[2]['transaction_id']=[[6, False,[x_transaction]]]
+                logging.warning(res)
+                logging.warning('')
+                logging.warning('')
+                return res
+        else:
+            return res

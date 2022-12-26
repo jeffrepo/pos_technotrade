@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
-    <t t-name="TransactionList" owl="1">
-        <div class="orders">
-            <div class="header-row" t-att-class="{ oe_hidden: env.isMobile }">
-                <div class="col transaction">Transaction</div>
-                <div class="col date">Date</div>
-                <div class="col pump">Pump</div>
-                <div class="col nozzle">Nozzle</div>
-                <div class="col fuel">Fuel grade name</div>
-                <div class="col volumen">Volume</div>
-                <div class="col amount">Amount</div>
-                <div class="col price">Price</div>
-                <div class="col totalvolumen">Total volumen</div>
-                <div class="col nozzle">Total</div>
-<!-- <div class="col name">Order</div>
-<div class="col date">Date</div>
-<div class="col customer">Customer</div>
-<div class="col salesman">Salesperson</div>
-<div class="col end total">Total</div>
-<div class="col state">State</div> -->
+    <t t-name="TransactionRow" owl="1">
+        <div class="order-row"
+        t-att-class="{ highlight: highlighted }"
+        t-on-click="() => this.trigger('click-sale-order', props.order)">
+            <div class="col name">
+
+                <div><t t-esc="transaction"/></div>
             </div>
-            <div class="order-list">
-                <t t-foreach="props.orders" t-as="order" t-key="order.id">
-                    <TransactionRow order="order" highlightedTransaction="highlightedTransaction" />
-                </t>
+
+            <div class="col date">
+
+                <div><t t-esc="date"/></div>
+            </div>
+            <div class="col partner">
+
+                <div><t t-esc="pump"/></div>
+            </div>
+            <div class="col salesman">
+
+                <div><t t-esc="nozzle"/></div>
+            </div>
+            <div class="col fuel">
+
+                <div><t t-esc="fuel_grade_name"/></div>
+            </div>
+            <div class="col volume">
+
+                <div><t t-esc="volume"/></div>
+            </div>
+            <div class="col price">
+
+                <div><t t-esc="price"/></div>
+            </div>
+
+            <div class="col end total">
+
+                <div class="flex-container">
+                    <div class="self-end">
+                        <t t-esc="totalamount"/>
+                    </div>
+                    <div t-if="showAmountUnpaid" class="self-end text-gray">
+                        (left: <t t-esc="amountUnpaidRepr"/>)
+                    </div>
+                </div>
             </div>
         </div>
     </t>

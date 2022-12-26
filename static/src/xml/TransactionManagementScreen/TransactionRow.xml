@@ -9,7 +9,7 @@
 
                 <div><t t-esc="transaction"/></div>
             </div>
-            
+
             <div class="col date">
 
                 <div><t t-esc="date"/></div>
@@ -30,18 +30,11 @@
 
                 <div><t t-esc="volume"/></div>
             </div>
-            <div class="col amount">
-
-                <div><t t-esc="amount"/></div>
-            </div>
             <div class="col price">
 
                 <div><t t-esc="price"/></div>
             </div>
-            <div class="col totalvolume">
 
-                <div><t t-esc="total_volume"/></div>
-            </div>
             <div class="col end total">
 
                 <div class="flex-container">
