@@ -119,7 +119,7 @@ odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
                     order: this.env.pos.get_order(),
                     product: this.env.pos.db.get_product_by_id(clickedTransaction['product_id']),
                     description: clickedTransaction.fuel_grade_name,
-                    price: clickedTransaction.total_amount,
+                    price: clickedTransaction.price,
                     price_manually_set: true,
                     transaction: clickedTransaction.id,
                     has_product_lot: 'none',
@@ -130,11 +130,15 @@ odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
                     console.log('New Line');
                     console.log(new_line);
                     console.log(clickedTransaction);
+
                     new_line.set_transaction(transaction_x);
                     console.log(new_line)
                     //new_line.setQuantityFromSOL(line);
                     //new_line.set_unit_price(clickedTransaction.total_amount);
                     //new_line.set_discount(line.discount);
+
+                    new_line.set_quantity(clickedTransaction.volume);
+
                     this.env.pos.get_order().add_orderline(new_line);
 
               }

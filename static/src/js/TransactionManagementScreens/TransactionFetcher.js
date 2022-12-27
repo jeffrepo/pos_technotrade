@@ -75,14 +75,53 @@ odoo.define('pos_technotrade.TransactionFetcher', function (require) {
          */
         async _fetch(limit, offset) {
             const sale_orders = [];
+            let currentPOSOrder = this.comp.env.pos.orders;
+            console.log('currentPOSOrder');
+            console.log(currentPOSOrder);
+            var order_transaction_exist = [];
+            if (currentPOSOrder && currentPOSOrder.length>0){
+                currentPOSOrder.forEach(order => {
+                    console.log('orde fetch')
+                    console.log(order)
+                    if (order.orderlines && order.orderlines.length > 0){
+
+                        order.orderlines.forEach(line => {
+                            console.log('order line')
+                            console.log(line)
+                            if ( line.transaction){
+                                order_transaction_exist.push(line.transaction);
+                            }
+                        });
+                    }
+                });
+            }
+            console.log('order_transaction_exist')
+            console.log(order_transaction_exist)
+            if (order_transaction_exist.length > 0){
+                console.log('si es mayoe que ')
+            }
             const server_transactions = await this._getTransactionsForCurrentPage();
+            const new_server_transaction = [];
+            if (server_transactions && server_transactions.length > 0){
+                        server_transactions.forEach(transaction => {
+
+                            if ( order_transaction_exist.includes(transaction.id) ){
+                                console.log('si exta');
+                            }else{
+                                new_server_transaction.push(transaction)
+                            }
+                        });
+
+            }
             console.log('_fetch in fetcher.js')
             console.log(sale_orders)
             console.log(server_transactions)
-            this.totalCount = server_transactions.length;
+            this.totalCount = new_server_transaction.length;
             console.log(' this.totalCount')
             console.log(this.totalCount)
-            return server_transactions;
+
+
+            return new_server_transaction;
         }
         async _getOrderIdsForCurrentPage(limit, offset) {
             let domain = [['currency_id', '=', this.comp.env.pos.currency.id]].concat(this.searchDomain || []);
@@ -93,11 +132,11 @@ odoo.define('pos_technotrade.TransactionFetcher', function (require) {
                 context: this.comp.env.session.user_context,
             });
         }
-        
+
         async _getTransactionsForCurrentPage() {
             var date_end = new Date();
             var date_start = new Date();
-            date_start.setHours(date_end.getHours()-48)   
+            date_start.setHours(date_end.getHours()-48)
             return await this.rpc({
                 model: 'pos.order',
                 method: 'report_pump_transactions',
