@@ -28,6 +28,14 @@ class PosOrder(models.Model):
     nozzle = fields.Integer('Nozzle')
     transaction = fields.Integer('Transaction technotrade')
 
+    def return_transactions(self):
+        for order in self:
+            if order.lines:
+                for line in order.lines:
+                    if line.transaction_id:
+                        line.transaction_id.unlink()
+        return True
+        
     @api.model
     def _order_fields(self, ui_order):
         res = super(PosOrder, self)._order_fields(ui_order)

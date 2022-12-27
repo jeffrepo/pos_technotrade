@@ -19,6 +19,7 @@
     'data': [
         'views/product_template_views.xml',
         'views/pos_technotrade_views.xml',
+        'views/pos_order_view.xml',
         #'views/pos_restaurant_views.xml',
         'views/product_views.xml',
     ],
