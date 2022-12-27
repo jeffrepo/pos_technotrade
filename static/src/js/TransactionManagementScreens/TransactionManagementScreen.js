@@ -120,7 +120,7 @@ odoo.define('pos_technotrade.TransactionManagementScreen', function (require) {
                     product: this.env.pos.db.get_product_by_id(clickedTransaction['product_id']),
                     description: clickedTransaction.fuel_grade_name,
                     price: clickedTransaction.price,
-                    price_manually_set: true,
+                    price_manually_set: false,
                     transaction: clickedTransaction.id,
                     has_product_lot: 'none',
                     tracking: 'none',
