@@ -35,7 +35,7 @@ class PosOrder(models.Model):
                     if line.transaction_id:
                         line.transaction_id.unlink()
         return True
-        
+
     @api.model
     def _order_fields(self, ui_order):
         res = super(PosOrder, self)._order_fields(ui_order)
@@ -102,7 +102,7 @@ class PosOrder(models.Model):
             'total_volume':trans.total_volume,
             'fuel_grade_name':trans.fuel_grade_name,
             'date':trans.datetime_text,
-            'volume':trans.volumne,
+            'volume':trans.volume,
             'amount':trans.amount,
             'price':trans.price
             })

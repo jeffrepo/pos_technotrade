@@ -8,4 +8,10 @@
         </div>
     </t>
 
+  <t t-name="PlateNumberButton" owl="1">
+    <div class="control-button o_plate_number" >
+      <i class="fa fa-puzzle-piece"/>
+          Ingresar Matrícula
+    </div>
+  </t>
 </templates>

@@ -24,7 +24,7 @@ class PosTechnotradeTransaction(models.Model):
     fuel_grade_name = fields.Char('Fuel grade name')
     datetime = fields.Datetime('Datetime')
     datetime_text = fields.Char('Datetime Text')
-    volumne = fields.Float('Volunen')
+    volume = fields.Float('Volune')
     amount = fields.Float('Amount')
     price = fields.Float('price')
     total_volume = fields.Float('Total volume')
@@ -33,3 +33,8 @@ class PosTechnotradeTransaction(models.Model):
     request_id = fields.Integer('Packet')
     product_id = fields.Many2one('product.product')
     pos_order_line_id = fields.Many2one('pos.order.line','Order line')
+
+class PosTechnotradePlateNumber(models.Model):
+    _name = "pos_technotrade.plate_number"
+
+    name = fields.Char('Numero de matricula')

@@ -16,7 +16,8 @@ from odoo.addons.base.models.res_partner import WARNING_MESSAGE, WARNING_HELP
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-
+    plate_number_ids = fields.One2many('res.partner.plate_number_line', 'partner_id', string='Matriculas')
+    
     def values_partner(self, partner_id, amount):
         logging.warning('Welcome to values_partner')
         partner = self.env['res.partner'].search([('id', '=', partner_id)])
@@ -43,3 +44,10 @@ class ResPartner(models.Model):
                     return "No hay un plazo de pago seleccionado"
             else:
                 return "Cliente sin autorización de credito"
+            
+class ResPartnerPlatesNumbers(models.Model):
+    _name = "res.partner.plate_number_line"
+    _rec_name = "plate_number_id"
+    
+    plate_number_id = fields.Many2one('pos_technotrade.plate_number', 'Matricula')
+    partner_id = fields.Many2one('res.partner','Contacto')

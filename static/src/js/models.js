@@ -63,6 +63,8 @@ const PosTechrOrderline = (Orderline) => class PosTechrOrderline extends Orderli
   init_from_JSON(json) {
       super.init_from_JSON(...arguments);
       this.transaction = json.transaction;
+      this.driver = json.driver;
+      this.plate_number_id = json.plate_number_id;
       console.log('Json extends orderLine');
       console.log(json);
   }
@@ -70,11 +72,29 @@ const PosTechrOrderline = (Orderline) => class PosTechrOrderline extends Orderli
   export_as_JSON() {
       const json = super.export_as_JSON(...arguments);
       json.transaction = this.transaction;
+      json.driver = this.driver;
+      json.plate_number_id = this.plate_number_id;
       console.log('export_as_json order.line')
       console.log(json)
       return json;
   }
 
+  set_driver(driver){
+      this.driver = driver;
+  }
+
+  get_driver(){
+      return this.driver;
+  }
+
+  set_plate_number(plate_number_id){
+      this.plate_number_id = plate_number_id;
+  }
+
+  get_plate_number(){
+      return this.plate_number_id;
+  }        
+    
   set_transaction(transaction){
       this.transaction = transaction;
   }

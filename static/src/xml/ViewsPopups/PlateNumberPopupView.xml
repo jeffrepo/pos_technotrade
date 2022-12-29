@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PlateNumberPopup" owl="1">
+        <div role="dialog" class="modal-dialog">
+            <div class="popup popup-couponproducts" style="background-color: #D2B4DE; border-radius:15px">
+
+                <p class="title">
+                    <t t-esc="props.title" />
+
+                </p>
+
+
+                <span class="body">
+                    
+                     <div style="padding: 0px 10px 10px; border-radius:9px">
+                          <p align="left"><b>Chofer</b></p>
+                          <input type="text" id="driver"/>
+                      </div>
+                    
+                    <div style="padding: 0px 10px 10px; border-radius:9px">
+                        <p align="left"><b>Matricula</b></p>
+                        <select style="    text-align: left;
+    display: inline-block;
+    overflow: hidden;
+    background: white;
+    min-height: 44px;
+    font-family: 'Lato';
+    font-size: 20px;
+    color: #444;
+    padding: 10px;
+    border-radius: 3px;
+    border: none;
+    box-shadow: 0px 0px 0px 1px gainsboro inset;
+    box-sizing: border-box;
+    width: 80%;" id="plate_number">
+                            <t t-if="props.plate_numbers_list">
+                                <t t-foreach="props.plate_numbers_list" t-as="plate" t-key="plate.id">
+                                    <option t-att-value="plate.id"><t t-esc="plate.name"/></option>
+                                </t>
+                             </t>   
+                        </select>
+                    </div>
+                    
+                </span>
+                <div class="footer">
+                    <div class="button cancel" t-on-click="confirm">
+                        <t t-esc="props.confirmText" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

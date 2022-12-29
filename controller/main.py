@@ -11,6 +11,8 @@ import logging
 import requests
 _logger = logging.getLogger(__name__)
 from odoo.http import JsonRPCDispatcher
+from dateutil import parser
+from datetime import datetime, timedelta
 
 class PosRoute(http.Controller):
 
@@ -47,12 +49,12 @@ class PosRoute(http.Controller):
                         transaction_exist = request.env['pos_technotrade.transaction'].sudo().search([('transaction','=', transaction ),('pump','=', pump ),('nozzle','=', nozzle )])
 
                         if len(transaction_exist) == 0:
-                            product_product = request.env['product.product'].sudo().search([('fuel_grade_id','>', 0)])
+                            product_product = request.env['product.product'].search([('fuel_grade_id','>', 0)])
                             new_dic_p = {}
                             for pr in product_product:
                                 if pr.fuel_grade_id not in new_dic_p:
                                     new_dic_p[pr.fuel_grade_id] = pr
-
+                            
                             transaction_dic = {
                                 'transaction': p['Data']['Transaction'],
                                 'pump':  p['Data']['Pump'],
@@ -60,6 +62,7 @@ class PosRoute(http.Controller):
                                 'nozzle': p['Data']['Nozzle'],
                                 'fuel_grade_id': p['Data']['FuelGradeId'] if 'FuelGradeId' in p['Data'] else 0 ,
                                 'fuel_grade_name': p['Data']['FuelGradeName'] if 'FuelGradeName' in p['Data'] else '',
+                                'datetime': parser.parse(t.datetime_text),
                                 'datetime_text': p['Data']['DateTime'],
                                 'volumne': p['Data']['Volume'],
                                 'amount': p['Data']['Amount'],
@@ -72,6 +75,9 @@ class PosRoute(http.Controller):
                             if len(transaction_id) > 0:
                                 logging.warning('transaction_id')
                                 logging.warning(transaction_id)
+                                new_time = transaction_id.datetime + timedelta(hours=6)
+                                transaction_id.update({'datetime': new_time})
+                                
                                 data =  {
                                 "Protocol": "jsonPTS",
                                 "Packets": [{

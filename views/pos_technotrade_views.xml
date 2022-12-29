@@ -19,7 +19,7 @@
 
                   </group>
                   <group>
-                      <field name="volumne"/>
+                      <field name="volume"/>
                       <field name="product_id"/>
                       <field name="amount"/>
                       <field name="price"/>
@@ -46,7 +46,7 @@
               <field name="fuel_grade_name"/>
               <field name="datetime"/>
               <field name="datetime_text"/>
-              <field name="volumne" optional="show"/>
+              <field name="volume" optional="show"/>
               <field name="amount"/>
               <field name="price"/>
               <field name="total_volume" optional="show"/>
