@@ -28,6 +28,7 @@ odoo.define('pos_technotrade.PlateNumberButton', function(require) {
         });
 
         const current_partner = this.env.pos.get_order().get_partner();
+        const orderline = this.env.pos.get_order().get_selected_orderline();
         console.log('current_customer')
         console.log(current_partner)
         
