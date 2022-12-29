@@ -9,7 +9,8 @@ from collections import defaultdict
 import psycopg2
 import pytz
 import re
-
+from datetime import datetime, timedelta
+from dateutil import parser
 from odoo import api, fields, models, tools, _
 from odoo.tools import float_is_zero, float_round, float_repr, float_compare
 from odoo.exceptions import ValidationError, UserError
@@ -28,6 +29,20 @@ class PosOrder(models.Model):
     nozzle = fields.Integer('Nozzle')
     transaction = fields.Integer('Transaction technotrade')
 
+    def get_plate_number_list(self, current_partner):
+        plate_numbers_list = []
+        plate_number_ids = self.env['res.partner.plate_number_line'].search([('partner_id','=', current_partner[0])])
+        if plate_number_ids:
+            for p in plate_number_ids:
+                dic_plate = {
+                    'id': p.id,
+                    'name': p.plate_number_id.name,
+                }
+                plate_numbers_list.append(dic_plate)
+        else:
+            raise UserError(_("Cliente no tiene matricula asignada"))
+        return plate_numbers_list
+    
     def return_transactions(self):
         for order in self:
             if order.lines:
@@ -35,7 +50,7 @@ class PosOrder(models.Model):
                     if line.transaction_id:
                         line.transaction_id.unlink()
         return True
-
+    
     @api.model
     def _order_fields(self, ui_order):
         res = super(PosOrder, self)._order_fields(ui_order)
@@ -110,6 +125,15 @@ class PosOrder(models.Model):
         logging.warning(transactions)
         return transactions
 
+    def update_datetime_transaction(self):
+        transactions_id = self.env['pos_technotrade.transaction'].search([('product_id','!=', False)])
+        if transactions_id:
+            for t in transactions_id:
+                t.update({'datetime': parser.parse(t.datetime_text)})
+                new_time = t.datetime + timedelta(hours=6)
+                t.update({'datetime': new_time})
+        return True
+    
     def update_product_grade_transaction(self):
         transactions_id = self.env['pos_technotrade.transaction'].search([('product_id','=', False),('fuel_grade_id','>', 0)])
         product_product = self.env['product.product'].search([('fuel_grade_id','>', 0)])
@@ -198,6 +222,8 @@ class PosOrderLine(models.Model):
     _inherit = "pos.order.line"
 
     transaction_id = fields.One2many('pos_technotrade.transaction','pos_order_line_id','Transaction')
+    driver = fields.Char('Chofer')
+    plate_number_id = fields.Many2one('pos_technotrade.plate_number','Matrícula')
 
     def _order_line_fields(self, line, session_id):
         res = super()._order_line_fields(line, session_id)
@@ -207,6 +233,10 @@ class PosOrderLine(models.Model):
         logging.warning('')
         x_transaction = False
         if line and line[2] and 'transaction' in line[2]:
+            if 'driver' in line[2]:
+                res[2]['driver'] = line[2]['driver']
+            if 'plate_number_id' in line[2]:
+                res[2]['plate_number_id'] = line[2]['plate_number_id']                
             x_transaction = line[2]['transaction']
             exist_transaction = self.env['pos_technotrade.transaction'].search([('id','=',x_transaction),('pos_order_line_id', '!=', False)])
             if len(exist_transaction) > 0:
