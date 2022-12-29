@@ -75,7 +75,7 @@ class PosRoute(http.Controller):
                             if len(transaction_id) > 0:
                                 logging.warning('transaction_id')
                                 logging.warning(transaction_id)
-                                new_time = transaction_id.datetime + timedelta(hours=6)
+                                new_time = transaction_id.datetime + timedelta(hours=3)
                                 transaction_id.update({'datetime': new_time})
                                 
                                 data =  {
