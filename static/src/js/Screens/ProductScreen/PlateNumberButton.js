@@ -51,34 +51,27 @@ odoo.define('pos_technotrade.PlateNumberButton', function(require) {
         if (confirmed) {
             var orderline_note = "";
             if (orderline){
-                if (orderline.transaction){
-                    if (document.getElementById('driver')){
-                        orderline.set_driver(document.getElementById('driver').value);
-                        orderline_note += "Chofer: " + document.getElementById('driver').value
-                    }else{
-                        orderline.set_driver(false);
-                    }
 
-
-                    if (document.getElementById('plate_number')){
-                        orderline.set_plate_number(document.getElementById('plate_number').value);
-
-                        var s_index = document.getElementById('plate_number').options.selectedIndex
-
-                        orderline_note += " Matrícula: "+ document.getElementById('plate_number').options[s_index].innerText
-                    }else{
-                        orderline.set_plate_number(false);
-                    }
-
-                    orderline.set_customer_note(orderline_note);
+                if (document.getElementById('driver')){
+                    orderline.set_driver(document.getElementById('driver').value);
+                    orderline_note += "Chofer: " + document.getElementById('driver').value
                 }else{
-
-                    this.showPopup('ErrorPopup', {
-                      title: this.env._t('Error'),
-                      body: this.env._t('Para agregar una Matrícula o Chofer, debe de ser un despacho válido'),
-                    });
-
+                    orderline.set_driver(false);
                 }
+
+
+                if (document.getElementById('plate_number')){
+                    orderline.set_plate_number(document.getElementById('plate_number').value);
+
+                    var s_index = document.getElementById('plate_number').options.selectedIndex
+
+                    orderline_note += " Matrícula: "+ document.getElementById('plate_number').options[s_index].innerText
+                }else{
+                    orderline.set_plate_number(false);
+                }     
+
+                orderline.set_customer_note(orderline_note);
+
             }
 
 
