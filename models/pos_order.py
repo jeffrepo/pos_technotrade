@@ -130,7 +130,7 @@ class PosOrder(models.Model):
         if transactions_id:
             for t in transactions_id:
                 t.update({'datetime': parser.parse(t.datetime_text)})
-                new_time = t.datetime + timedelta(hours=6)
+                new_time = t.datetime + timedelta(hours=3)
                 t.update({'datetime': new_time})
         return True
     
