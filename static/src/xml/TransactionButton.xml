@@ -4,7 +4,7 @@
     <t t-name="TransactionButton" owl="1">
         <div class="control-button o_transaction_button">
             <i class="fa fa-link" role="img" aria-label="Set transaction"
-               title="Set Transaction" /> Transactions
+               title="Set Transaction" /> Despachos
         </div>
     </t>
 
