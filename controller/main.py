@@ -64,7 +64,7 @@ class PosRoute(http.Controller):
                                 'fuel_grade_name': p['Data']['FuelGradeName'] if 'FuelGradeName' in p['Data'] else '',
                                 'datetime': parser.parse(p['Data']['DateTime']),
                                 'datetime_text': p['Data']['DateTime'],
-                                'volumne': p['Data']['Volume'],
+                                'volume': p['Data']['Volume'],
                                 'amount': p['Data']['Amount'],
                                 'price': p['Data']['Price'],
                                 'product_id': new_dic_p[p['Data']['FuelGradeId']].id if 'FuelGradeId' in p['Data'] else False,
