@@ -45,11 +45,24 @@ class PosOrder(models.Model):
     
     def return_transactions(self):
         for order in self:
-            if order.lines:
+            transactions_list_done = []
+            if order.is_refunded and order.lines:
                 for line in order.lines:
                     if line.transaction_id:
+                        transactions_list_done.append(line.transaction_id)
                         line.transaction_id.unlink()
-        return True
+            if len(transactions_list_done) > 0:
+                return {
+        'name': 'LIBERACIÓN DE DESPACHOS EXITOSO',
+        'type': 'ir.actions.act_window',
+        'res_model': 'pos_technotrade.confirm_wizard',
+        'view_mode': 'form',
+        'view_type': 'form',
+        'target': 'new',
+    }
+
+            else:
+                return False
     
     @api.model
     def _order_fields(self, ui_order):
