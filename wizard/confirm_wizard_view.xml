@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="confirm_wizard_form">
+            <field name="name">pos_technotrade.confirm_wizard.form</field>
+            <field name="model">pos_technotrade.confirm_wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Transaccion exitosa">
+                    <footer>
+                        <button class="oe_highlight" name="accept" string="Aceptar" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
