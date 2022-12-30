@@ -5,4 +5,4 @@ class confirm_wizard(models.TransientModel):
 
 
     def accept(self):
-        return return {'type': 'ir.actions.act_window_close'}
+        return {'type': 'ir.actions.act_window_close'}
