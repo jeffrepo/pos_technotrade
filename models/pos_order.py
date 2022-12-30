@@ -100,7 +100,7 @@ class PosOrder(models.Model):
         logging.warning('ENTRA report_pump_transactions')
         # transactions = [{'product_id': 6,'name': '', 'Transaction': 1, 'Nozzle': 2 , 'Pump': 3, 'TotalAmount': 100, 'Date': '2022-10-27T17:12:1'}]
         transactions = []
-        search_transactions = self.env['pos_technotrade.transaction'].search([('pos_order_line_id', '=', False)], order='id desc')
+        search_transactions = self.env['pos_technotrade.transaction'].search([('pos_order_line_id', '=', False),('no_show_pos','=',False)], order='id desc')
 
         logging.warning('TRANSACTION')
         logging.warning(search_transactions)
