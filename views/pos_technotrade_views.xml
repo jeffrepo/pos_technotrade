@@ -16,7 +16,7 @@
                       <field name="datetime"/>
                       <field name="datetime_text"/>
                       <field name="pos_order_line_id"/>
-
+                      <field name="no_show_pos"/> 
                   </group>
                   <group>
                       <field name="volume"/>
@@ -49,6 +49,7 @@
               <field name="volume" optional="show"/>
               <field name="amount"/>
               <field name="price"/>
+              <field name="no_show_pos" optional="show"/>
               <field name="total_volume" optional="show"/>
               <field name="total_amount"/>
               <field name="configuration_id" optional="show"/>
