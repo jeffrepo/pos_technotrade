@@ -33,6 +33,7 @@ class PosTechnotradeTransaction(models.Model):
     request_id = fields.Integer('Packet')
     product_id = fields.Many2one('product.product')
     pos_order_line_id = fields.Many2one('pos.order.line','Order line')
+    no_show_pos = fields.Boolean('Not show in POS')
 
 class PosTechnotradePlateNumber(models.Model):
     _name = "pos_technotrade.plate_number"
