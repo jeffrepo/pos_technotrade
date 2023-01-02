@@ -50,7 +50,7 @@ class PosOrder(models.Model):
                 for line in order.lines:
                     if line.transaction_id:
                         transactions_list_done.append(line.transaction_id)
-                        line.transaction_id.unlink()
+                        line.transaction_id.pos_order_line_id = False
             if len(transactions_list_done) > 0:
                 return {
         'name': 'LIBERACIÓN DE DESPACHOS EXITOSO',
