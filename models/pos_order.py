@@ -249,10 +249,11 @@ class PosOrderLine(models.Model):
             if 'driver' in line[2]:
                 res[2]['driver'] = line[2]['driver']
             if 'plate_number_id' in line[2]:
-                if ine[2]['plate_number_id'] == 20:
-                    res[2]['plate_number_id'] = 19
-                else:
+                plate_number_exist = self.env['pos_technotrade.plate_number'].search([('id','=',int(line[2]['plate_number_id']))])
+                if len(plate_number_exist) > 0:
                     res[2]['plate_number_id'] = line[2]['plate_number_id']
+                else:
+                    raise UserError(_("Matrícula no existe"))
             x_transaction = line[2]['transaction']
             exist_transaction = self.env['pos_technotrade.transaction'].search([('id','=',x_transaction),('pos_order_line_id', '!=', False)])
             if len(exist_transaction) > 0:
