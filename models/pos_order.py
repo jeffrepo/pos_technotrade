@@ -69,9 +69,6 @@ class PosOrder(models.Model):
                     'view_type': 'form',
                     'target': 'new',
                 }
-
-            else:
-                return False
     
     @api.model
     def _order_fields(self, ui_order):
