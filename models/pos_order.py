@@ -53,13 +53,22 @@ class PosOrder(models.Model):
                         line.transaction_id.pos_order_line_id = False
             if len(transactions_list_done) > 0:
                 return {
-        'name': 'LIBERACIÓN DE DESPACHOS EXITOSO',
-        'type': 'ir.actions.act_window',
-        'res_model': 'pos_technotrade.confirm_wizard',
-        'view_mode': 'form',
-        'view_type': 'form',
-        'target': 'new',
-    }
+                    'name': 'LIBERACIÓN DE DESPACHOS EXITOSO',
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'pos_technotrade.confirm_wizard',
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'target': 'new',
+                }
+            else:
+                return {
+                    'name': 'No hay despacho de combustible para liberar en este Pedido',
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'pos_technotrade.confirm_wizard',
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'target': 'new',
+                }
 
             else:
                 return False
