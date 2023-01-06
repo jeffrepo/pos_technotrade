@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form string="Transaccion exitosa">
                     <footer>
-                        <button class="oe_highlight" name="accept" string="Aceptar" />
+                        <button string="Aceptar" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>
             </field>
