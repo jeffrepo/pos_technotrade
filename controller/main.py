@@ -46,7 +46,8 @@ class PosRoute(http.Controller):
                         transaction = p['Data']['Transaction']
                         pump = p['Data']['Pump']
                         nozzle = p['Data']['Nozzle']
-                        transaction_exist = request.env['pos_technotrade.transaction'].sudo().search([('transaction','=', transaction ),('pump','=', pump ),('nozzle','=', nozzle )])
+                        datetimed = p['Data']['DateTime']
+                        transaction_exist = request.env['pos_technotrade.transaction'].sudo().search([('transaction','=', transaction ),('pump','=', pump ),('nozzle','=', nozzle ),('datetime_text','=',datetimed)])
 
                         if len(transaction_exist) == 0:
                             product_product = request.env['product.product'].sudo().search([('fuel_grade_id','>', 0)])
