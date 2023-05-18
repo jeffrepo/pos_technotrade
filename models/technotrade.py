@@ -34,7 +34,12 @@ class PosTechnotradeTransaction(models.Model):
     product_id = fields.Many2one('product.product')
     pos_order_line_id = fields.Many2one('pos.order.line','Order line')
     no_show_pos = fields.Boolean('Not show in POS')
+    transaction_key = fields.Char('Transaction key')
 
+    _sql_constraints = [
+        ('transaction_uniq', 'UNIQUE(transaction_key)', 'Transaction key must be unique'),
+    ]
+    
 class PosTechnotradePlateNumber(models.Model):
     _name = "pos_technotrade.plate_number"
 
