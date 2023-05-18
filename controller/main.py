@@ -56,6 +56,7 @@ class PosRoute(http.Controller):
                                 if pr.fuel_grade_id not in new_dic_p:
                                     new_dic_p[pr.fuel_grade_id] = pr
                             
+                            transaction_key = str(p['Data']['Transaction'])+str(p['Data']['Pump'])+str(p['Data']['Nozzle'])+'-'+str(p['Data']['DateTime'])
                             transaction_dic = {
                                 'transaction': p['Data']['Transaction'],
                                 'pump':  p['Data']['Pump'],
@@ -71,6 +72,7 @@ class PosRoute(http.Controller):
                                 'product_id': new_dic_p[p['Data']['FuelGradeId']].id if 'FuelGradeId' in p['Data'] else False,
                                 'total_volume': p['Data']['TotalVolume'],
                                 'total_amount': p['Data']['TotalAmount'],
+                                'transaction_key': transaction_key,
                             }
                             transaction_id = request.env['pos_technotrade.transaction'].sudo().create(transaction_dic)
                             if len(transaction_id) > 0:
