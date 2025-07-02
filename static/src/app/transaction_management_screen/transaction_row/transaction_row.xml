@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="pos_technotrade.TransactionRow">
+        <div class="order-row"
+        t-att-class="{ highlight: highlighted }"
+        t-on-click="() => this.props.onClickSaleOrder(props.order)">
+            <div class="col name p-2">
+                <div t-if="ui.isSmall">Transaction</div>
+                <div><t t-esc="transaction"/></div>
+            </div>
+            <div class="col date p-2">
+                <div t-if="ui.isSmall">Date</div>
+                <div><t t-esc="date"/></div>
+            </div>
+            <div class="col date p-2">
+                <div t-if="ui.isSmall">Pump</div>
+                <div><t t-esc="pump"/></div>
+            </div>
+            <div class="col date p-2">
+                <div t-if="ui.isSmall">nozzle</div>
+                <div><t t-esc="nozzle"/></div>
+            </div>
+            <div class="col date p-2">
+                <div t-if="ui.isSmall">Fuel grade</div>
+                <div><t t-esc="fuel_grade_name"/></div>
+            </div>
+            <div class="col date p-2">
+                <div t-if="ui.isSmall">Volumne</div>
+                <div><t t-esc="volume"/></div>
+            </div>
+            <div class="col date p-2">
+                <div t-if="ui.isSmall">Price</div>
+                <div><t t-esc="price"/></div>
+            </div>
+            <div class="col date p-2">
+                <div t-if="ui.isSmall">Total amount</div>
+                <div><t t-esc="totalamount"/></div>
+            </div>
+            <!-- <div class="col end total p-2">
+                <div t-if="ui.isSmall">Total</div>
+                <div class="flex-container d-flex flex-column h-100">
+                    <div >
+                        <t t-esc="total"/>
+                    </div>
+                    <div t-if="showAmountUnpaid" class="text-muted">
+                        (left: <t t-esc="amountUnpaidRepr"/>)
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div class="col state p-2">
+                <div t-if="ui.isSmall">State</div>
+                <div><t t-esc="state"/></div>
+            </div> -->
+        </div>
+    </t>
+
+</templates>

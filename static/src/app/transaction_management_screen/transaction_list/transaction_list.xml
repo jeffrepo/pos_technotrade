@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="pos_technotrade.TransactionList">
+        <div class="orders overflow-y-auto">
+            <div class="header-row d-flex text-bg-700 fw-bolder" t-att-class="{ 'd-none': ui.isSmall }">
+                <div class="col name p-2">Despacho</div>
+                <div class="col date p-2">Date</div>
+                <div class="col Surtidor p-2">Surtidor</div>
+                <div class="col Manguera p-2">Manguera</div>
+                <div class="col Combustible p-2">Combustible</div>
+                <div class="col Litros p-2">Litros</div>
+                <div class="col total p-2">Price</div>
+                <div class="col total p-2">Total</div>
+            </div>
+            <div class="order-list">
+                <t t-foreach="props.orders" t-as="order" t-key="order.id">
+                    <TransactionRow
+                        onClickSaleOrder.bind="props.onClickSaleOrder"
+                        order="order"
+                        highlightedOrder="highlightedOrder" />
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>
